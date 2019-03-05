@@ -1,0 +1,57 @@
+.SessionContainer {
+    background-color: lightgray;
+    height: auto;
+    margin: 0px;
+    display: grid;
+    grid-template-columns: 10% 80% 10%
+}
+
+.GridCentered {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    background-color: white;
+}
+
+h1 {
+    margin: 0px;
+}
+
+
+
+.ExerciseGrid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+.GridItemID {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 5px;
+}
+
+.GridItemName {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 5px;
+}
+
+.GridItemSelect {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    padding: 5px;
+}
+
+.GridItemRemove {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    padding: 5px;
+}

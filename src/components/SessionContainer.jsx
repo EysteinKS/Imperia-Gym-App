@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import PropTypes from "prop-types"
-
+import "./SessionContainer.css"
+import AddExercise from "./AddExercise"
+import Paper from '@material-ui/core/Paper';
 
 class SessionContainer extends Component {
     constructor(props){
@@ -9,7 +11,8 @@ class SessionContainer extends Component {
         this.state = {
             machines: [],
             newMachine: undefined,
-            error: null
+            error: null,
+            isDialogOpen: false,
         }
     }
 
@@ -37,9 +40,8 @@ class SessionContainer extends Component {
     onRemoveStep = (index) => {
         let machineArray = this.state.machines
         let removed = machineArray.splice(index , 1)
-        console.log("Removing step", ...removed)
 
-        this.setState({ machines: machineArray }, () => console.log(this.state.machines))
+        this.setState({ machines: machineArray })
     }
 
     onChangeStep = (step, index) => {
@@ -60,17 +62,27 @@ class SessionContainer extends Component {
         ]
 
         if(machineList[id - 1]){
-            console.log("Found machine with ID" + id)
             let ret = { ...machineList[id - 1], weight: machineList[id - 1].weightArray[0] }
             return ret
         } else {
-            console.log("Didn't find machine with ID" + id)
             return false
         }
     }
 
-    checkState = () => {
-        console.log(this.state.machines)
+    onHandleOpen = () => {
+        this.setState({
+            isDialogOpen: true
+        })
+    }
+
+    onHandleClose = () => {
+        this.setState({
+            isDialogOpen: false
+        })
+    }
+
+    showState = () => {
+        console.log(this.state)
     }
 
     render(){
@@ -84,13 +96,21 @@ class SessionContainer extends Component {
         })
 
         return(
-            <div>
-                <ul>{list}</ul>
-                <div>
-                    <input name="newMachine" type="tel" value={this.state.newMachine} onChange={this.handleChange}></input>
-                    <button onClick={this.onAddStep}>+</button>
+            <div className="SessionContainer">
+                <div className="GridCentered">
+                    <h1>Økt</h1>
+                    <ul>{list}</ul>
+                    <div>
+                        <input name="newMachine" type="text" value={this.state.newMachine} onChange={this.handleChange}></input>
+                        <button onClick={this.onAddStep}>+</button>
+                    </div>
+                    <button onClick={this.onHandleOpen}>Open Dialog</button>
+                    <button onClick={this.showState}>Show State</button>
                 </div>
-                <button onClick={this.checkState}>Check State</button>
+                <AddExercise
+                    open={this.state.isDialogOpen}
+                    handleDialogClose={this.onHandleClose}
+                />
             </div>
         )
     }
@@ -100,18 +120,21 @@ const Machine = props => {
     const { machine, index, onChange, onRemove } = props
     
     return(
-        <li key={index}>
-            <p>ID: {machine.id}</p>
-            <p>Name: {machine.name}</p>
-            <select 
+        <Paper>
+        <li key={index} className="ExerciseGrid">
+            <p className="GridItemID">ID: {machine.id}</p>
+            <p className="GridItemName">Name: {machine.name}</p>
+            <select
+            className="GridItemSelect"
             value={machine.weight}
             onChange={(event) => onChange({ ...machine, weight: event.target.value })}>
                 {machine.weightArray.map(weight => {
                     return <option value={weight}>{weight}</option>
                 })}
             </select>
-            <button onClick={onRemove}>Remove</button>
+            <button onClick={onRemove} className="GridItemRemove">Remove</button>
         </li>
+        </Paper>
     )
 }
 
