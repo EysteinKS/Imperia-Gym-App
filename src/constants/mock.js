@@ -1,3 +1,5 @@
+import { mapObject } from "../util"
+
 const user = {
     username: "",
     email: "",
@@ -20,12 +22,38 @@ const history = {
 
 }
 
+const exercisesFlat = input => {
+    let obj = {}
+    mapObject(input, (key) => {
+        let firstKey = input[key]
+        if(firstKey.name !== undefined){
+            mapObject(firstKey, (secondKey) => {
+                let nextKey = firstKey[secondKey]
+                if(nextKey.name !== undefined) {
+                    mapObject(nextKey, (thirdKey) => {
+                        let lastKey = nextKey[thirdKey]
+                        if(lastKey.name !== undefined ) {
+                            console.log(String(lastKey.ID) + ": " + String(lastKey.name))
+                            obj[thirdKey] = lastKey
+                        }
+                    })
+                }
+            })
+        }
+        
+    })
+    console.log("Returned object: ", obj)
+    return obj
+}
+
 const exercises = {
     FreeWeights: {
+        name: "Frivekt",
         FirstFloor: {
+            name: "Første etasje",
             FF01: {
                 ID: "FF01",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Benkpress",
                 weightArray: [
                     "1 kg",
                     "2 kg",
@@ -36,7 +64,7 @@ const exercises = {
             },
             FF02: {
                 ID: "FF02",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Skråbenk",
                 weightArray: [
                     "1 kg",
                     "2 kg",
@@ -47,9 +75,10 @@ const exercises = {
             }
         },
         SecondFloor: {
+            name: "Andre Etasje",
             SF01: {
                 ID: "SF01",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Militærpress",
                 weightArray: [
                     "1 kg",
                     "2 kg",
@@ -61,10 +90,12 @@ const exercises = {
         }
     },
     Machines: {
+        name: "Maskiner",
         Legs: {
+            name: "Ben",
             L01: {
                 ID: "L01",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Dytte benet opp",
                 weightArray: [
                     "16 kg",
                     "17 kg",
@@ -74,9 +105,10 @@ const exercises = {
             }
         },
         Shoulders: {
+            name: "Skuldre",
             S02: {
                 ID: "S02",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Løfte skuldre",
                 weightArray: [
                     "15 kg",
                     "16 kg",
@@ -87,7 +119,7 @@ const exercises = {
             },
             S09: {
                 ID: "S09",
-                name: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                name: "Kald skulder",
                 weightArray: [
                     "15 kg",
                     "16 kg",
@@ -102,6 +134,7 @@ const exercises = {
 
 export {
     exercises,
+    exercisesFlat,
     user,
     history
 }
