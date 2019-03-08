@@ -119,7 +119,7 @@ const AddExercise = props => {
       <DialogTitle>Øvelser</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions>
-        <ExerciseName exerciseList={exerciseList} exerciseID={exerciseID}/>
+        {/*<ExerciseName exerciseList={exerciseList} exerciseID={exerciseID}/>*/}
         <TextField
           value={exerciseID}
           placeholder="ID"
@@ -139,6 +139,9 @@ const ExerciseSelect = props => {
   const { object, checked, onChange } = props;
   let list = mapObject(object, (machine, index) => {
     let id = object[machine].ID;
+    
+    //CHECK IF EXERCISE IS SELECTED, CHANGE COLOR ON PAPER WHEN ACTIVE
+
     if (object[machine].name !== undefined) {
       return (
         <li key={index}>
@@ -147,7 +150,6 @@ const ExerciseSelect = props => {
               <Radio
                 checked={checked === id}
                 onChange={() => onChange(id)}
-                color="default"
                 value={id}
                 className="SelectRadio"
               />
