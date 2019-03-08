@@ -123,8 +123,8 @@ const Machine = props => {
     return (
         <Paper>
             <li key={index} className="ExerciseGrid">
-                <p className="GridItemID">ID: {machine.ID}</p>
-                <p className="GridItemName">Name: {machine.name}</p>
+                <p className="GridItemID">{machine.ID}</p>
+                <p className="GridItemName">{machine.name}</p>
                 <select
                     className="GridItemSelect"
                     value={machine.weight}
