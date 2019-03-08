@@ -28,11 +28,11 @@ li {
 
 .ExerciseGrid {
     display: grid;
-    grid-template-columns: 25% 25% 25% 12.5% 12.5%;
+    grid-template-columns: 40% 30% 15% 15%;
     grid-template-rows: 50% 50%;
 }
 
-.GridItemID {
+.GridItemName {
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 1;
@@ -40,41 +40,32 @@ li {
     padding-bottom: 15px;
 }
 
-.GridItemName {
+.GridItemSelect {
     grid-column-start: 2;
     grid-column-end: 3;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    padding-bottom: 15px;
-}
-
-.GridItemSelect {
-    grid-column-start: 3;
-    grid-column-end: 4;
     grid-row-start: 1;
     grid-row-end: 2;
     padding: 5px;
 }
 
 .GridItemEdit {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.GridItemRemove {
     grid-column-start: 4;
     grid-column-end: 5;
     grid-row-start: 1;
     grid-row-end: 2;
-    padding: 5px;
-}
-
-.GridItemRemove {
-    grid-column-start: 5;
-    grid-column-end: 6;
-    grid-row-start: 1;
-    grid-row-end: 2;
-    padding: 5px;
+    padding-right: 10px;
 }
 
 .GridItemNotes {
     grid-column-start: 1;
-    grid-column-end: 6;
+    grid-column-end: 5;
     grid-row-start: 2;
     grid-row-end: 3;
     padding: 5px;

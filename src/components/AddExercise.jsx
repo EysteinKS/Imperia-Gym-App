@@ -16,22 +16,69 @@ import "./AddExercise.css";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Radio from "@material-ui/core/Radio";
+
+const styles = () => ({
+  root: {
+    width: "100%",
+    padding: "0px"
+  },
+  panel: {
+    width: "100%",
+    padding: "0px",
+    display: "block"
+  },
+  darkBackground: {
+    backgroundColor: "rgba(0,0,0,.03)"
+  }
+});
+
+/*const ExpansionPanelSummary = withStyles({
+    root: {
+        backgroundColor: 'rgba(0,0,0,.03)',
+        borderBottom: '1px solid rgba(0,0,0,.125)',
+        marginBottom: -1,
+        minHeight: 56,
+        '&$expanded': {
+          minHeight: 56,
+        },
+      },
+      content: {
+        '&$expanded': {
+          margin: '12px 0',
+        },
+      },
+      expanded: {},
+})(props => <MuiExpansionPanelSummary {...props}/>)
+ExpansionPanelSummary.muiName = 'ExpansionPanelSummary';*/
 
 const AddExercise = props => {
   const [exerciseID, setExerciseID] = useState();
   const [expanded, setExpanded] = useState();
-  const [secondExpanded, setSecondExpanded] = useState()
+  const [secondExpanded, setSecondExpanded] = useState();
 
-  const { open, handleDialogClose, handleAddExercise, exercises } = props;
+  const {
+    open,
+    handleDialogClose,
+    handleAddExercise,
+    exercises,
+    classes
+  } = props;
 
-  const content = mapObject(exercises, (result, index) => {
+  let content = mapObject(exercises, (result, index) => {
     const map = exercises[result];
     const next = mapObject(map, (panel, index) => {
       if (map[panel].name !== undefined) {
         return (
-          <ExercisePanel panel={map[panel]} key={index} expanded={secondExpanded} setExpanded={setSecondExpanded}>
+          <ExercisePanel
+            panel={map[panel]}
+            key={index}
+            expanded={secondExpanded}
+            setExpanded={setSecondExpanded}
+            class={classes.panel}
+          >
             <ExerciseSelect
               object={map[panel]}
               checked={exerciseID}
@@ -44,7 +91,14 @@ const AddExercise = props => {
 
     if (exercises[result].name != null) {
       return (
-        <ExercisePanel panel={map} key={index} expanded={expanded} setExpanded={setExpanded}>
+        <ExercisePanel
+          panel={map}
+          key={index}
+          expanded={expanded}
+          setExpanded={setExpanded}
+          class={classes.panel}
+          darkBackground={classes.darkBackground}
+        >
           {next}
         </ExercisePanel>
       );
@@ -57,6 +111,7 @@ const AddExercise = props => {
       scroll="paper"
       onClose={() => handleDialogClose()}
       className="ExerciseDialog"
+      fullWidth="true"
       maxWidth="md"
     >
       <DialogTitle>Øvelser</DialogTitle>
@@ -106,22 +161,26 @@ const ExerciseSelect = props => {
 
 const ExercisePanel = props => {
   let panelName = props.panel.name;
-  let isExpanded = (props.expanded === panelName)
+  let isExpanded = props.expanded === panelName;
 
   return (
     <ExpansionPanel
-        square
-        expanded={isExpanded}
-        onChange={isExpanded ? () => props.setExpanded(null) : () => props.setExpanded(panelName)}
+      square
+      expanded={isExpanded}
+      onChange={
+        isExpanded
+          ? () => props.setExpanded(null)
+          : () => props.setExpanded(panelName)
+      }
     >
-      <ExpansionPanelSummary>
+      <ExpansionPanelSummary className={props.darkBackground}>
         <p>{panelName}</p>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
+      <ExpansionPanelDetails className={props.class}>
         <div>{props.children}</div>
       </ExpansionPanelDetails>
     </ExpansionPanel>
   );
 };
 
-export default AddExercise;
+export default withStyles(styles)(AddExercise);

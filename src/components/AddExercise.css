@@ -1,8 +1,7 @@
 .SelectGrid {
     display: grid;
     grid-template-columns: 20% 20% 60%;
-    padding: 10px;
-    width: 20rem;
+    padding: 20px;
 }
 
 .SelectRadio {
