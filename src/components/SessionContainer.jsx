@@ -1,9 +1,18 @@
 import React, { Component } from "react"
-import PropTypes from "prop-types"
 import "./SessionContainer.css"
 import AddExercise from "./AddExercise"
 import Paper from '@material-ui/core/Paper';
 import { exercises, exercisesFlat } from "../constants/mock"
+
+import Fab from '@material-ui/core/Fab';
+import Button from "@material-ui/core/Button"
+import AddIcon from '@material-ui/icons/Add';
+import Edit from "@material-ui/icons/Edit"
+import DeleteIcon from "@material-ui/icons/Delete"
+
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 class SessionContainer extends Component {
     constructor(props) {
@@ -36,8 +45,6 @@ class SessionContainer extends Component {
         }
     }
 
-    //TODO: REMOVE STEP BY INDEX
-    //CHECK WHY STEP WITH NEXT INDEX GETS WEIGHT-INDEX FROM REMOVED STEP
     onRemoveStep = (index) => {
         let machineArray = this.state.machines
         machineArray.splice(index, 1)
@@ -56,10 +63,6 @@ class SessionContainer extends Component {
 
     getMachine = (id) => {
         let machineList = this.machineList
-
-        //MAP EXERCISES OBJECT TO A FLAT OBJECT
-        //EG exercises.FF01 etc
-
         if (machineList[id]) {
             let ret = { ...machineList[id], weight: machineList[id].weightArray[0], notes: "" }
             return ret
@@ -99,12 +102,7 @@ class SessionContainer extends Component {
                 <div className="GridCentered">
                     <h1>Økt</h1>
                     <ul>{list}</ul>
-                    <div>
-                        <input name="newMachine" type="text" value={this.state.newMachine} onChange={this.handleChange}></input>
-                        <button onClick={this.onAddStep}>+</button>
-                    </div>
-                    <button onClick={this.onHandleOpen}>Open Dialog</button>
-                    <button onClick={this.showState}>Show State</button>
+                    <Fab onClick={this.onHandleOpen} color="default"><AddIcon/></Fab>
                 </div>
                 <AddExercise
                     open={this.state.isDialogOpen}
@@ -125,15 +123,19 @@ const Machine = props => {
             <li key={index} className="ExerciseGrid">
                 <p className="GridItemID">{machine.ID}</p>
                 <p className="GridItemName">{machine.name}</p>
-                <select
+                <Select
                     className="GridItemSelect"
                     value={machine.weight}
-                    onChange={(event) => onChange({ ...machine, weight: event.target.value })}>
+                    onChange={(event) => onChange({ ...machine, weight: event.target.value })}
+                    input={<OutlinedInput
+                        labelWidth={0}
+                    />}>
                     {machine.weightArray.map((weight, index) => {
-                        return <option value={weight} key={index}>{weight}</option>
+                        return <MenuItem value={weight} key={index}>{weight}</MenuItem>
                     })}
-                </select>
-                <button onClick={onRemove} className="GridItemRemove">Remove</button>
+                </Select>
+                <Button className="GridItemEdit"><Edit/></Button>
+                <Button onClick={onRemove} className="GridItemRemove"><DeleteIcon/></Button>
                 <input
                     name="notes"
                     type="text"
@@ -144,12 +146,6 @@ const Machine = props => {
             </li>
         </Paper>
     )
-}
-
-Machine.propTypes = {
-    machine: PropTypes.object,
-    index: PropTypes.array,
-    onChange: PropTypes.func
 }
 
 export default SessionContainer

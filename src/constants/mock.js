@@ -72,6 +72,28 @@ const exercises = {
                     "4 kg",
                     "5 kg"
                 ]
+            },
+            FF03: {
+                ID: "FF03",
+                name: "Squats",
+                weightArray: [
+                    "1 kg",
+                    "2 kg",
+                    "3 kg",
+                    "4 kg",
+                    "5 kg"
+                ]
+            },
+            FF04: {
+                ID: "FF04",
+                name: "Trapp",
+                weightArray: [
+                    "1 kg",
+                    "2 kg",
+                    "3 kg",
+                    "4 kg",
+                    "5 kg"
+                ]
             }
         },
         SecondFloor: {
@@ -79,6 +101,17 @@ const exercises = {
             SF01: {
                 ID: "SF01",
                 name: "Militærpress",
+                weightArray: [
+                    "1 kg",
+                    "2 kg",
+                    "3 kg",
+                    "4 kg",
+                    "5 kg"
+                ]
+            },
+            SF02: {
+                ID: "SF02",
+                name: "Gruppepress",
                 weightArray: [
                     "1 kg",
                     "2 kg",
@@ -126,6 +159,17 @@ const exercises = {
                     "17 kg",
                     "18 kg",
                     "19 kg"
+                ]
+            }
+        },
+        Arms: {
+            name: "Armer",
+            A01: {
+                ID: "A01",
+                name: "Armpress",
+                weightArray: [
+                    "1 kg",
+                    "5 kg"
                 ]
             }
         }

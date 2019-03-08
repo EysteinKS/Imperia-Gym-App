@@ -1,0 +1,25 @@
+.SelectGrid {
+    display: grid;
+    grid-template-columns: 20% 20% 60%;
+    padding: 10px;
+    width: 20rem;
+}
+
+.SelectRadio {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.SelectID {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.SelectName {
+    grid-column-start: 3;
+    grid-column-end: 4;
+}
+
+.ExerciseInput {
+    align-content: center;
+}
