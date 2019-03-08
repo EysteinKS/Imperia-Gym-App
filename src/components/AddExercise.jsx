@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import { mapObject } from "../util";
 import "./AddExercise.css";
@@ -19,6 +20,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Radio from "@material-ui/core/Radio";
+import TextField from "@material-ui/core/TextField";
 
 const styles = () => ({
   root: {
@@ -55,7 +57,7 @@ const styles = () => ({
 ExpansionPanelSummary.muiName = 'ExpansionPanelSummary';*/
 
 const AddExercise = props => {
-  const [exerciseID, setExerciseID] = useState();
+  const [exerciseID, setExerciseID] = useState("");
   const [expanded, setExpanded] = useState();
   const [secondExpanded, setSecondExpanded] = useState();
 
@@ -64,6 +66,7 @@ const AddExercise = props => {
     handleDialogClose,
     handleAddExercise,
     exercises,
+    exerciseList,
     classes
   } = props;
 
@@ -104,7 +107,6 @@ const AddExercise = props => {
       );
     }
   });
-
   return (
     <Dialog
       open={open}
@@ -116,13 +118,16 @@ const AddExercise = props => {
     >
       <DialogTitle>Øvelser</DialogTitle>
       <DialogContent>{content}</DialogContent>
-      <input
-        type="text"
-        value={exerciseID}
-        onChange={event => setExerciseID(event.target.value)}
-        className="ExerciseInput"
-      />
       <DialogActions>
+        <ExerciseName exerciseList={exerciseList} exerciseID={exerciseID}/>
+        <TextField
+          value={exerciseID}
+          placeholder="ID"
+          onChange={event => setExerciseID(event.target.value)}
+          className="ExerciseInput"
+          margin="normal"
+          variant="filled"
+        />
         <Button onClick={() => handleDialogClose()}>Lukk</Button>
         <Button onClick={() => handleAddExercise(exerciseID)}>Velg</Button>
       </DialogActions>
@@ -157,6 +162,15 @@ const ExerciseSelect = props => {
     }
   });
   return list;
+};
+
+const ExerciseName = props => {
+  const { exerciseList, exerciseID } = props;
+  if (exerciseList[exerciseID]) {
+    return <p>{exerciseList[exerciseID].name}</p>;
+  } else {
+    return <CircularProgress/>;
+  }
 };
 
 const ExercisePanel = props => {

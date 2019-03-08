@@ -1,18 +1,12 @@
 import React, { Component } from "react";
 import "./SessionContainer.css";
 import AddExercise from "./AddExercise";
-import Paper from "@material-ui/core/Paper";
 import { exercises, exercisesFlat } from "../constants/mock";
 
 import Fab from "@material-ui/core/Fab";
-import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import Edit from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
+import Exercise from "./Exercise"
 
 class SessionContainer extends Component {
   constructor(props) {
@@ -26,7 +20,7 @@ class SessionContainer extends Component {
   }
 
   componentDidMount() {
-    this.machineList = exercisesFlat(exercises);
+    this.exerciseList = exercisesFlat(exercises);
   }
 
   handleChange = event => {
@@ -34,10 +28,10 @@ class SessionContainer extends Component {
   };
 
   onAddStep = id => {
-    let addMachine = this.getMachine(id);
-    if (addMachine) {
+    let newMachine = this.getExerciseList(id);
+    if (newMachine) {
       this.setState(state => ({
-        machines: state.machines.concat(addMachine),
+        machines: state.machines.concat(newMachine),
         isDialogOpen: false
       }));
     } else {
@@ -61,12 +55,12 @@ class SessionContainer extends Component {
     }));
   };
 
-  getMachine = id => {
-    let machineList = this.machineList;
-    if (machineList[id]) {
+  getExerciseList = id => {
+    let exerciseList = this.exerciseList;
+    if (exerciseList[id]) {
       let ret = {
-        ...machineList[id],
-        weight: machineList[id].weightArray[0],
+        ...exerciseList[id],
+        weight: exerciseList[id].weightArray[0],
         notes: ""
       };
       return ret;
@@ -87,14 +81,10 @@ class SessionContainer extends Component {
     });
   };
 
-  showState = () => {
-    console.log(this.state);
-  };
-
   render() {
     let list = this.state.machines.map((machine, index) => {
       return (
-        <Machine
+        <Exercise
           machine={machine}
           onChange={changedStep => this.onChangeStep(changedStep, index)}
           onRemove={() => this.onRemoveStep(index)}
@@ -107,7 +97,7 @@ class SessionContainer extends Component {
       <div className="SessionContainer">
         <div className="GridCentered">
           <h1>Økt</h1>
-          <ul>{list}</ul>
+          {list}
           <Fab onClick={this.onHandleOpen} color="default">
             <AddIcon />
           </Fab>
@@ -117,47 +107,11 @@ class SessionContainer extends Component {
           handleDialogClose={this.onHandleClose}
           handleAddExercise={this.onAddStep}
           exercises={exercises}
+          exerciseList={exercisesFlat(exercises)}
         />
       </div>
     );
   }
 }
-
-const Machine = props => {
-  const { machine, index, onChange, onRemove } = props;
-
-  return (
-    <Paper key={index} className="ExerciseGrid">
-      <p className="GridItemName">{machine.name}</p>
-      <Select
-        className="GridItemSelect"
-        value={machine.weight}
-        onChange={event => onChange({ ...machine, weight: event.target.value })}
-        input={<OutlinedInput labelWidth={0} />}
-      >
-        {machine.weightArray.map((weight, index) => {
-          return (
-            <MenuItem value={weight} key={index}>
-              {weight}
-            </MenuItem>
-          );
-        })}
-      </Select>
-      <Button size="small" className="GridItemEdit">
-        <Edit />
-      </Button>
-      <Button size="small" onClick={onRemove} className="GridItemRemove">
-        <DeleteIcon />
-      </Button>
-      <input
-        name="notes"
-        type="text"
-        value={machine.notes}
-        onChange={event => onChange({ ...machine, notes: event.target.value })}
-        className="GridItemNotes"
-      />
-    </Paper>
-  );
-};
 
 export default SessionContainer;
