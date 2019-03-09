@@ -87,6 +87,8 @@ const AddExercise = props => {
   const [exerciseID, setExerciseID] = useState("");
   const [expanded, setExpanded] = useState();
   const [secondExpanded, setSecondExpanded] = useState();
+  let dialogBottomRef = useRef(null)
+  const scrollToBottom = () => { console.log("Scrolling to bottom of Dialog"); dialogBottomRef.current.scrollIntoView({behavior: "smooth"})}
 
   const {
     open,
@@ -107,6 +109,7 @@ const AddExercise = props => {
             expanded={secondExpanded}
             setExpanded={setSecondExpanded}
             class={classes.panel}
+            scroll={scrollToBottom}
           >
             <ExerciseSelect
               object={map[panel]}
@@ -127,6 +130,7 @@ const AddExercise = props => {
           setExpanded={setExpanded}
           class={classes.panel}
           darkBackground={classes.darkBackground}
+          scroll={scrollToBottom}
         >
           {next}
         </ExercisePanel>
@@ -143,7 +147,7 @@ const AddExercise = props => {
       maxWidth="md"
     >
       <DialogTitle>Øvelser</DialogTitle>
-      <DialogContent>{content}</DialogContent>
+      <DialogContent>{content}<div ref={dialogBottomRef}/></DialogContent>
       <DialogActions className={classes.center}>
         <TextField
           value={exerciseID}
@@ -170,7 +174,7 @@ const ExerciseSelect = props => {
 
     if (object[machine].name !== undefined) {
       return (
-        <Paper onClick={() => { onChange(id); myRef.current.scrollIntoView({behavior: "smooth", block: "end", inline: "end"})}} key={index} color="primary">
+        <Paper onClick={() => { onChange(id); myRef.current.scrollIntoView({behavior: "smooth"})}} key={index} color="primary">
           <div className="SelectGrid" ref={myRef}>
             <Radio
               checked={checked === id}
@@ -193,7 +197,6 @@ const ExerciseSelect = props => {
 const ExercisePanel = props => {
   let panelName = props.panel.name;
   let isExpanded = props.expanded === panelName;
-  let myRef = useRef(null)
 
   return (
     <ExpansionPanel
@@ -206,12 +209,12 @@ const ExercisePanel = props => {
             }
           : () => {
               props.setExpanded(panelName);
-              myRef.current.scrollIntoView({behavior: "smooth", block: "end", inline: "end"})
+              props.scroll()
             }
       }
     >
       <ExpansionPanelSummary className={props.darkBackground}>
-        <p ref={myRef}>{panelName}</p>
+        <p>{panelName}</p>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={props.class}>
         <div>{props.children}</div>

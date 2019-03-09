@@ -13,19 +13,23 @@ class SessionContainer extends Component {
       newExercise: undefined,
       error: null,
       isDialogOpen: false,
-      expanded: null
+      expanded: null,
+      shouldScroll: false
     };
-
-    this.bottomRef = React.createRef()
+    this.lastRef = React.createRef(null)
+    this.list = []
   }
 
   componentDidMount() {
     this.exerciseList = exercisesFlat(exercises);
   }
 
-  scrollToBottom = () => {
-    console.log(this.bottomRef)
-    this.bottomRef.current.scrollIntoView({behavior: "smooth"})
+  componentDidUpdate() {
+    if (this.list.length && this.state.shouldScroll) {
+      this.lastRef = this.list[this.list.length - 1].ref; 
+      this.scrollToBottom()
+      this.setState({shouldScroll: false})
+    }
   }
 
   handleChange = event => {
@@ -37,13 +41,18 @@ class SessionContainer extends Component {
     if (newExercise) {
       this.setState(state => ({
         currentExercises: state.currentExercises.concat(newExercise),
-        isDialogOpen: false
+        isDialogOpen: false,
+        shouldScroll: true
       }));
-      this.scrollToBottom()
     } else {
       alert("Finner ikke maskin " + id);
     }
   };
+
+  scrollToBottom = () => {
+    this.lastRef.current.scrollIntoView({ behavior: "smooth" })
+    this.setState({ shouldScroll: false })
+  }
 
   onRemoveStep = index => {
     let exerciseArray = this.state.currentExercises;
@@ -80,25 +89,26 @@ class SessionContainer extends Component {
   }
 
   render() {
-    let list = this.state.currentExercises.map((ex, index) => {
+    this.list = this.state.currentExercises.map((ex, index) => {
       return (
-        <Exercise
-          newExercise={ex}
-          onChange={changedStep => this.onChangeStep(changedStep, index)}
-          onRemove={() => this.onRemoveStep(index)}
-          key={index}
-          index={index}
-          expanded={this.state.expanded}
-          setExpanded={(callback) => this.onEditExercise(callback)}
-        />
+        <div ref={this.lastRef}>
+          <Exercise
+            newExercise={ex}
+            onChange={changedStep => this.onChangeStep(changedStep, index)}
+            onRemove={() => this.onRemoveStep(index)}
+            key={index}
+            index={index}
+            expanded={this.state.expanded}
+            setExpanded={(callback) => this.onEditExercise(callback)}
+          />
+        </div>
       );
     });
 
     return (
       <div className="SessionContainer">
         <div className="GridCentered">
-          {list}
-          <div ref={this.bottomRef}></div>
+          {this.list}
         </div>
         <AddExercise
           open={this.props.openDialog}
