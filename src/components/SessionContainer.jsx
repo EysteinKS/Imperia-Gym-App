@@ -15,7 +15,8 @@ class SessionContainer extends Component {
       currentExercises: [],
       newExercise: undefined,
       error: null,
-      isDialogOpen: false
+      isDialogOpen: false,
+      expanded: null
     };
   }
 
@@ -81,6 +82,10 @@ class SessionContainer extends Component {
     });
   };
 
+  onEditExercise = index => {
+    this.setState({ expanded: index })
+  }
+
   render() {
     let list = this.state.currentExercises.map((ex, index) => {
       return (
@@ -89,6 +94,9 @@ class SessionContainer extends Component {
           onChange={changedStep => this.onChangeStep(changedStep, index)}
           onRemove={() => this.onRemoveStep(index)}
           key={index}
+          index={index}
+          expanded={this.state.expanded}
+          setExpanded={(callback) => this.onEditExercise(callback)}
         />
       );
     });

@@ -11,12 +11,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import PlayIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
 import StopIcon from "@material-ui/icons/Stop";
+import LockIcon from "@material-ui/icons/Lock"
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 const Exercise = props => {
-  const { newExercise, index, onChange, onRemove } = props;
-  const [expanded, setExpanded] = useState(false);
+  const { newExercise, index, onChange, onRemove, expanded, setExpanded } = props;
   const [timerStatus, setTimerStatus] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const timeoutRef = useRef(null);
@@ -75,8 +75,8 @@ const Exercise = props => {
     );
   } else {
     pauseOrEdit = (
-      <Button className="GridItemEdit" onClick={() => setExpanded(!expanded)}>
-        <EditIcon />
+      <Button className="GridItemEdit" onClick={() => setExpanded(expanded === index ? null : index )}>
+        {expanded === index ? <LockIcon/> : <EditIcon />}
       </Button>
     );
   }
@@ -122,9 +122,9 @@ const Exercise = props => {
       <ExerciseTimer
         timerStatus={timerStatus}
         setTimerStatus={setTimerStatus}
-        setExpanded={setExpanded}
+        setExpanded={(callback) => setExpanded(callback)}
       />
-      {expanded ? menu : null}
+      {expanded === index ? menu : null}
     </Paper>
   );
 };
@@ -147,7 +147,7 @@ const ExerciseTimer = props => {
         className="GridItemTimer"
         onClick={() => {
           props.setTimerStatus("play");
-          props.setExpanded(false);
+          props.setExpanded(null);
         }}
       >
         <PlayIcon />

@@ -169,20 +169,18 @@ const ExerciseSelect = props => {
 
     if (object[machine].name !== undefined) {
       return (
-        <li key={index}>
-          <Paper onClick={() => onChange(id)}>
-            <div className="SelectGrid">
-              <Radio
-                checked={checked === id}
-                onChange={() => onChange(id)}
-                value={id}
-                className="SelectRadio"
-              />
-              <p className="SelectID">{id}</p>
-              <p className="SelectName">{object[machine].name}</p>
-            </div>
-          </Paper>
-        </li>
+        <Paper onClick={() => onChange(id)} key={index} color="primary">
+          <div className="SelectGrid">
+            <Radio
+              checked={checked === id}
+              onChange={() => onChange(id)}
+              value={id}
+              className="SelectRadio"
+            />
+            <p className="SelectID">{id}</p>
+            <p className="SelectName">{object[machine].name}</p>
+          </div>
+        </Paper>
       );
     } else {
       return null;
