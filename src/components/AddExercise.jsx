@@ -137,7 +137,7 @@ const AddExercise = props => {
     <Dialog
       open={open}
       scroll="paper"
-      onClose={() => handleDialogClose()}
+      onClose={() => handleDialogClose(false)}
       className="ExerciseDialog"
       fullWidth={true}
       maxWidth="md"
@@ -153,8 +153,8 @@ const AddExercise = props => {
           margin="normal"
           variant="filled"
         />
-        <Button onClick={() => handleDialogClose()}>Lukk</Button>
-        <Button onClick={() => handleAddExercise(exerciseID)}>Velg</Button>
+        <Button onClick={() => handleDialogClose(false)}>Lukk</Button>
+        <Button onClick={() => { handleAddExercise(exerciseID); handleDialogClose(false)}}>Velg</Button>
       </DialogActions>
     </Dialog>
   );

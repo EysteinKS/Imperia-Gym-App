@@ -1,14 +1,8 @@
 .SessionContainer {
-    height: auto;
+    height: 100%;
     margin: 0px;
-    display: grid;
-    grid-template-columns: 5% 90% 5%
-}
-
-.GridCentered {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    background-color: white;
+    padding-top: 3vh;
+    padding-bottom: 10vh;
 }
 
 h1 {
@@ -23,6 +17,11 @@ ul {
 
 li {
     list-style-type: none;
+}
+
+.GridCentered {
+    padding-left: 5vw;
+    padding-right: 5vw;
 }
 
 .ExerciseGrid {

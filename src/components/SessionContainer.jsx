@@ -70,18 +70,6 @@ class SessionContainer extends Component {
     }
   };
 
-  onHandleOpen = () => {
-    this.setState({
-      isDialogOpen: true
-    });
-  };
-
-  onHandleClose = () => {
-    this.setState({
-      isDialogOpen: false
-    });
-  };
-
   onEditExercise = index => {
     this.setState({ expanded: index })
   }
@@ -104,15 +92,11 @@ class SessionContainer extends Component {
     return (
       <div className="SessionContainer">
         <div className="GridCentered">
-          <h1>Økt</h1>
           {list}
-          <Fab onClick={this.onHandleOpen} color="default">
-            <AddIcon />
-          </Fab>
         </div>
         <AddExercise
-          open={this.state.isDialogOpen}
-          handleDialogClose={this.onHandleClose}
+          open={this.props.openDialog}
+          handleDialogClose={(callback) => this.props.setDialog(callback)}
           handleAddExercise={this.onAddStep}
           exercises={exercises}
           exerciseList={this.exerciseList}

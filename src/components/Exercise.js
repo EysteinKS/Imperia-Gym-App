@@ -37,6 +37,7 @@ const Exercise = props => {
           onClick={() => {
             clearTimeout(timeoutRef.current);
             setConfirmDelete(false);
+            setExpanded(null);
             onRemove();
           }}
           className="GridItemRemove"
@@ -108,6 +109,7 @@ const Exercise = props => {
             value={newExercise.weight}
             variant="outlined"
             placeholder="Vekt"
+            type="tel"
             onChange={event =>
               onChange({ ...newExercise, weight: event.target.value })
             }

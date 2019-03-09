@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import SessionContainer from "./components/SessionContainer"
+import Header from "./components/Header"
 
 
 //TODO
@@ -10,10 +11,22 @@ import SessionContainer from "./components/SessionContainer"
 
 
 class App extends Component {
+  constructor(){
+    super()
+    this.state = {
+      openDialog: false
+    }
+  }
+
+  setDialog = next => {
+    this.setState({ openDialog: next })
+  }
+
   render() {
     return (
       <div className="App">
-        <SessionContainer/>
+        <SessionContainer openDialog={this.state.openDialog} setDialog={(callback) => this.setDialog(callback)}/>
+        <Header setDialog={(callback) => this.setDialog(callback)}/>
       </div>
     );
   }
