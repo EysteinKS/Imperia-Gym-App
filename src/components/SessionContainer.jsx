@@ -3,9 +3,6 @@ import "./SessionContainer.css";
 import AddExercise from "./AddExercise";
 import { exercises, exercisesFlat } from "../constants/mock";
 
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-
 import Exercise from "./Exercise"
 
 class SessionContainer extends Component {
@@ -18,10 +15,17 @@ class SessionContainer extends Component {
       isDialogOpen: false,
       expanded: null
     };
+
+    this.bottomRef = React.createRef()
   }
 
   componentDidMount() {
     this.exerciseList = exercisesFlat(exercises);
+  }
+
+  scrollToBottom = () => {
+    console.log(this.bottomRef)
+    this.bottomRef.current.scrollIntoView({behavior: "smooth"})
   }
 
   handleChange = event => {
@@ -35,6 +39,7 @@ class SessionContainer extends Component {
         currentExercises: state.currentExercises.concat(newExercise),
         isDialogOpen: false
       }));
+      this.scrollToBottom()
     } else {
       alert("Finner ikke maskin " + id);
     }
@@ -93,6 +98,7 @@ class SessionContainer extends Component {
       <div className="SessionContainer">
         <div className="GridCentered">
           {list}
+          <div ref={this.bottomRef}></div>
         </div>
         <AddExercise
           open={this.props.openDialog}

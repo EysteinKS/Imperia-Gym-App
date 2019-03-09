@@ -3,7 +3,7 @@
 //HAVE STRING INPUT FIELD ON TOP TO ENTER
 //HAVE MENUES UNDERNEATHER FOR MACHINES AND FREEWEIGHT SORTED
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -164,13 +164,14 @@ const ExerciseSelect = props => {
   const { object, checked, onChange } = props;
   let list = mapObject(object, (machine, index) => {
     let id = object[machine].ID;
+    let myRef = useRef(null)
 
     //CHECK IF EXERCISE IS SELECTED, CHANGE COLOR ON PAPER WHEN ACTIVE
 
     if (object[machine].name !== undefined) {
       return (
-        <Paper onClick={() => onChange(id)} key={index} color="primary">
-          <div className="SelectGrid">
+        <Paper onClick={() => { onChange(id); myRef.current.scrollIntoView({behavior: "smooth", block: "end", inline: "end"})}} key={index} color="primary">
+          <div className="SelectGrid" ref={myRef}>
             <Radio
               checked={checked === id}
               onChange={() => onChange(id)}
@@ -192,6 +193,7 @@ const ExerciseSelect = props => {
 const ExercisePanel = props => {
   let panelName = props.panel.name;
   let isExpanded = props.expanded === panelName;
+  let myRef = useRef(null)
 
   return (
     <ExpansionPanel
@@ -204,11 +206,12 @@ const ExercisePanel = props => {
             }
           : () => {
               props.setExpanded(panelName);
+              myRef.current.scrollIntoView({behavior: "smooth", block: "end", inline: "end"})
             }
       }
     >
       <ExpansionPanelSummary className={props.darkBackground}>
-        <p>{panelName}</p>
+        <p ref={myRef}>{panelName}</p>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={props.class}>
         <div>{props.children}</div>
