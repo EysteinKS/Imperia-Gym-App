@@ -28,7 +28,7 @@ class SessionContainer extends Component {
   };
 
   onAddStep = id => {
-    let newMachine = this.getExerciseList(id);
+    let newMachine = this.getExerciseList(id.toUpperCase());
     if (newMachine) {
       this.setState(state => ({
         machines: state.machines.concat(newMachine),

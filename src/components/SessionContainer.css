@@ -27,8 +27,9 @@ li {
 
 .ExerciseGrid {
     display: grid;
-    grid-template-columns: 40% 30% 15% 15%;
+    grid-template-columns: 38% 30% 15% 15% 2%;
     margin-bottom: 15px;
+    box-shadow: inset 0px 0px 20px 10px rgba(0,0,0,0.6);
 }
 
 .GridItemName {
@@ -59,16 +60,7 @@ li {
     grid-column-end: 5;
     grid-row-start: 2;
     grid-row-end: 3;
-    padding-right: 10px;
-}
-
-.GridItemRemoveRed {
-    grid-column-start: 4;
-    grid-column-end: 5;
-    grid-row-start: 2;
-    grid-row-end: 3;
-    padding-right: 10px;
-    background-color: crimson
+    margin-right: 10px;
 }
 
 .GridItemTimer {
@@ -76,7 +68,7 @@ li {
     grid-column-end: 5;
     grid-row-start: 1;
     grid-row-end: 2;
-    padding-right: 10px;
+    margin-right: 10px;
 }
 
 .GridItemNotes {

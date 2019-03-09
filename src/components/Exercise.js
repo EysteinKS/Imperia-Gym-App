@@ -4,6 +4,7 @@ import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
+import FormControl from '@material-ui/core/FormControl';
 
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -27,14 +28,13 @@ const Exercise = props => {
         className="GridItemNotes"
       />
       {confirmDelete
-        ? <Button size="small" onClick={onRemove} className="GridItemRemove" variant="contained" color="secondary"><DeleteIcon />?</Button>
+        ? <Button size="small" onClick={() => {setConfirmDelete(false); onRemove()}} className="GridItemRemove" variant="contained" color="secondary"><DeleteIcon />?</Button>
         : <Button size="small" onClick={() => { setConfirmDelete(true); setTimeout(() => setConfirmDelete(false), 3000)}} className="GridItemRemove"><DeleteIcon /></Button>
       }
     </React.Fragment>
   )
 
   let pauseOrEdit
-
   if(timerStatus == "play"){
     pauseOrEdit = <Button size="small" className="GridItemEdit" onClick={() => setTimerStatus("paused")}><PauseIcon /></Button>
   } else { 
@@ -44,23 +44,26 @@ const Exercise = props => {
   return (
     <Paper className="ExerciseGrid" key={index}>
       <p className="GridItemName">{machine.name}</p>
-      <Select
-        className="GridItemSelect"
-        value={machine.weight}
-        onChange={event => onChange({ ...machine, weight: event.target.value })}
-        input={<OutlinedInput labelWidth={0} />}
-      >
-        {machine.weightArray.map((weight, index) => {
-          return (
-            <MenuItem value={weight} key={index}>
-              {weight}
-            </MenuItem>
-          );
-        })}
-      </Select>
+      <FormControl className="GridItemSelect" disabled={(timerStatus === "play") ? true : false}>
+        <Select
+          className="GridItemSelect"
+          value={machine.weight}
+          onChange={event => onChange({ ...machine, weight: event.target.value })}
+          input={<OutlinedInput labelWidth={0} />}
+        >
+          {machine.weightArray.map((weight, index) => {
+            return (
+              <MenuItem value={weight} key={index}>
+                {weight}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
       {pauseOrEdit}
       <ExerciseTimer timerStatus={timerStatus} setTimerStatus={setTimerStatus} setExpanded={setExpanded}/>
       {expanded ? menu : null}
+      <p className="GridItemEnd"> </p>
     </Paper>
   );
 };
