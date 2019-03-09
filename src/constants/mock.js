@@ -33,7 +33,6 @@ const exercisesFlat = input => {
                     mapObject(nextKey, (thirdKey) => {
                         let lastKey = nextKey[thirdKey]
                         if(lastKey.name !== undefined ) {
-                            console.log(String(lastKey.ID) + ": " + String(lastKey.name))
                             obj[thirdKey] = lastKey
                         }
                     })
@@ -112,13 +111,7 @@ const exercises = {
             SF02: {
                 ID: "SF02",
                 name: "Gruppepress",
-                weightArray: [
-                    "1 kg",
-                    "2 kg",
-                    "3 kg",
-                    "4 kg",
-                    "5 kg"
-                ]
+                weightArray: false
             }
         }
     },
@@ -175,6 +168,7 @@ const exercises = {
         }
     }
 }
+
 
 export {
     exercises,

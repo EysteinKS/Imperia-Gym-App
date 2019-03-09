@@ -107,7 +107,7 @@ class SessionContainer extends Component {
           handleDialogClose={this.onHandleClose}
           handleAddExercise={this.onAddStep}
           exercises={exercises}
-          exerciseList={exercisesFlat(exercises)}
+          exerciseList={this.exerciseList}
         />
       </div>
     );
