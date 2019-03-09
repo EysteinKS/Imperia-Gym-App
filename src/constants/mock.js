@@ -41,7 +41,6 @@ const exercisesFlat = input => {
         }
         
     })
-    console.log("Returned object: ", obj)
     return obj
 }
 

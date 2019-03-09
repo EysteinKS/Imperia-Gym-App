@@ -22,6 +22,7 @@ import Paper from "@material-ui/core/Paper";
 import Radio from "@material-ui/core/Radio";
 import TextField from "@material-ui/core/TextField";
 
+//STYLING START
 const styles = () => ({
   root: {
     width: "100%",
@@ -43,44 +44,45 @@ const styles = () => ({
 
 const ExpansionPanel = withStyles({
   root: {
-    border: '1px solid rgba(0,0,0,.125)',
-    boxShadow: 'none',
-    '&:not(:last-child)': {
-      borderBottom: 0,
+    border: "1px solid rgba(0,0,0,.125)",
+    boxShadow: "none",
+    "&:not(:last-child)": {
+      borderBottom: 0
     },
-    '&:before': {
-      display: 'none',
-    },
+    "&:before": {
+      display: "none"
+    }
   },
   expanded: {
-    margin: 'auto',
-  },
+    margin: "auto"
+  }
 })(MuiExpansionPanel);
 
 const ExpansionPanelSummary = withStyles({
   root: {
-    borderBottom: '1px solid rgba(0,0,0,.125)',
+    borderBottom: "1px solid rgba(0,0,0,.125)",
     marginBottom: -1,
     minHeight: 56,
-    '&$expanded': {
-      minHeight: 56,
-    },
+    "&$expanded": {
+      minHeight: 56
+    }
   },
   content: {
-    '&$expanded': {
-      margin: '12px 0',
-    },
+    "&$expanded": {
+      margin: "12px 0"
+    }
   },
-  expanded: {},
+  expanded: {}
 })(props => <MuiExpansionPanelSummary {...props} />);
 
-ExpansionPanelSummary.muiName = 'ExpansionPanelSummary';
+ExpansionPanelSummary.muiName = "ExpansionPanelSummary";
 
 const ExpansionPanelDetails = withStyles(theme => ({
   root: {
-    padding: theme.spacing.unit * 2,
-  },
+    padding: theme.spacing.unit * 2
+  }
 }))(MuiExpansionPanelDetails);
+//STYLING END
 
 const AddExercise = props => {
   const [exerciseID, setExerciseID] = useState("");
@@ -138,7 +140,7 @@ const AddExercise = props => {
       scroll="paper"
       onClose={() => handleDialogClose()}
       className="ExerciseDialog"
-      fullWidth="true"
+      fullWidth={true}
       maxWidth="md"
     >
       <DialogTitle>Øvelser</DialogTitle>
@@ -164,7 +166,7 @@ const ExerciseSelect = props => {
   const { object, checked, onChange } = props;
   let list = mapObject(object, (machine, index) => {
     let id = object[machine].ID;
-    
+
     //CHECK IF EXERCISE IS SELECTED, CHANGE COLOR ON PAPER WHEN ACTIVE
 
     if (object[machine].name !== undefined) {
@@ -210,8 +212,12 @@ const ExercisePanel = props => {
       expanded={isExpanded}
       onChange={
         isExpanded
-          ? () => props.setExpanded(null)
-          : () => props.setExpanded(panelName)
+          ? () => {
+              props.setExpanded(null);
+            }
+          : () => {
+              props.setExpanded(panelName);
+            }
       }
     >
       <ExpansionPanelSummary className={props.darkBackground}>

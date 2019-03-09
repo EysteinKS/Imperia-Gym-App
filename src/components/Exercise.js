@@ -11,9 +11,10 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import PlayIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
 import StopIcon from "@material-ui/icons/Stop";
+import TextField from "@material-ui/core/TextField";
 
 const Exercise = props => {
-  const { machine, index, onChange, onRemove } = props;
+  const { newExercise, index, onChange, onRemove } = props;
   const [expanded, setExpanded] = useState(false);
   const [timerStatus, setTimerStatus] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -24,8 +25,10 @@ const Exercise = props => {
       <input
         name="notes"
         type="text"
-        value={machine.notes}
-        onChange={event => onChange({ ...machine, notes: event.target.value })}
+        value={newExercise.notes}
+        onChange={event =>
+          onChange({ ...newExercise, notes: event.target.value })
+        }
         className="GridItemNotes"
       />
       {confirmDelete ? (
@@ -60,9 +63,7 @@ const Exercise = props => {
   const setDeleteTimeout = () => {
     const timeout = setTimeout(() => {
       setConfirmDelete(false);
-      console.log("Delete Timeout launched after 3 seconds");
     }, 3000);
-    console.log("Setting Delete Timeout");
     timeoutRef.current = timeout;
   };
 
@@ -91,22 +92,21 @@ const Exercise = props => {
 
   return (
     <Paper className="ExerciseGrid" key={index}>
-      <p className="GridItemName">{machine.name}</p>
+      <p className="GridItemName">{newExercise.name}</p>
       <FormControl
-        className="GridItemSelect"
-        disabled={timerStatus === "play" ? true : false}
+        className="GridItemWeight"
+        disabled={timerStatus === "play"}
       >
-        {" "}
-        {machine.weightArray ? (
+        {newExercise.weightArray ? (
           <Select
-            className="GridItemSelect"
-            value={machine.weight}
+            className="GridItemWeight"
+            value={newExercise.weight}
             onChange={event =>
-              onChange({ ...machine, weight: event.target.value })
+              onChange({ ...newExercise, weight: event.target.value })
             }
             input={<OutlinedInput labelWidth={0} />}
           >
-            {machine.weightArray.map((weight, index) => {
+            {newExercise.weightArray.map((weight, index) => {
               return (
                 <MenuItem value={weight} key={index}>
                   {weight}
@@ -115,7 +115,16 @@ const Exercise = props => {
             })}
           </Select>
         ) : (
-          <input className="GridItemSelect" value={machine.weight} type="text" onChange={(event) => onChange({ ...machine, weight: event.target.value })}/>
+          <TextField
+            className="GridItemWeight"
+            value={newExercise.weight}
+            variant="outlined"
+            placeholder="Vekt"
+            onChange={event =>
+              onChange({ ...newExercise, weight: event.target.value })
+            }
+            disabled={timerStatus === "play"}
+          />
         )}
       </FormControl>
       {pauseOrEdit}

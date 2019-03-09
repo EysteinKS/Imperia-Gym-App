@@ -12,8 +12,8 @@ class SessionContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      machines: [],
-      newMachine: undefined,
+      currentExercises: [],
+      newExercise: undefined,
       error: null,
       isDialogOpen: false
     };
@@ -28,10 +28,10 @@ class SessionContainer extends Component {
   };
 
   onAddStep = id => {
-    let newMachine = this.getExerciseList(id.toUpperCase());
-    if (newMachine) {
+    let newExercise = this.getExerciseList(id.toUpperCase());
+    if (newExercise) {
       this.setState(state => ({
-        machines: state.machines.concat(newMachine),
+        currentExercises: state.currentExercises.concat(newExercise),
         isDialogOpen: false
       }));
     } else {
@@ -40,18 +40,18 @@ class SessionContainer extends Component {
   };
 
   onRemoveStep = index => {
-    let machineArray = this.state.machines;
-    machineArray.splice(index, 1);
+    let exerciseArray = this.state.currentExercises;
+    exerciseArray.splice(index, 1);
 
-    this.setState({ machines: machineArray });
+    this.setState({ currentExercises: exerciseArray });
   };
 
   onChangeStep = (step, index) => {
     this.setState(state => ({
-      machines: []
-        .concat(state.machines.slice(0, index))
+      currentExercises: []
+        .concat(state.currentExercises.slice(0, index))
         .concat(step)
-        .concat(state.machines.slice(index + 1))
+        .concat(state.currentExercises.slice(index + 1))
     }));
   };
 
@@ -82,10 +82,10 @@ class SessionContainer extends Component {
   };
 
   render() {
-    let list = this.state.machines.map((machine, index) => {
+    let list = this.state.currentExercises.map((ex, index) => {
       return (
         <Exercise
-          machine={machine}
+          newExercise={ex}
           onChange={changedStep => this.onChangeStep(changedStep, index)}
           onRemove={() => this.onRemoveStep(index)}
           key={index}
