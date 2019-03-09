@@ -8,7 +8,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-//import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import { mapObject } from "../util";
 import "./AddExercise.css";
@@ -146,7 +145,6 @@ const AddExercise = props => {
       <DialogTitle>Øvelser</DialogTitle>
       <DialogContent>{content}</DialogContent>
       <DialogActions className={classes.center}>
-        {/*<ExerciseName exerciseList={exerciseList} exerciseID={exerciseID}/>*/}
         <TextField
           value={exerciseID}
           placeholder="ID"
@@ -192,15 +190,6 @@ const ExerciseSelect = props => {
   });
   return list;
 };
-
-/*const ExerciseName = props => {
-  const { exerciseList, exerciseID } = props;
-  if (exerciseList[exerciseID]) {
-    return <p>{exerciseList[exerciseID].name}</p>;
-  } else {
-    return <CircularProgress/>;
-  }
-};*/
 
 const ExercisePanel = props => {
   let panelName = props.panel.name;

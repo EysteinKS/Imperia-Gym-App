@@ -12,6 +12,7 @@ import PlayIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
 import StopIcon from "@material-ui/icons/Stop";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const Exercise = props => {
   const { newExercise, index, onChange, onRemove } = props;
@@ -22,9 +23,9 @@ const Exercise = props => {
 
   let menu = (
     <React.Fragment>
-      <input
+      <TextField
         name="notes"
-        type="text"
+        variant="outlined"
         value={newExercise.notes}
         onChange={event =>
           onChange({ ...newExercise, notes: event.target.value })
@@ -33,21 +34,19 @@ const Exercise = props => {
       />
       {confirmDelete ? (
         <Button
-          size="small"
           onClick={() => {
             clearTimeout(timeoutRef.current);
             setConfirmDelete(false);
             onRemove();
           }}
           className="GridItemRemove"
-          variant="contained"
+          variant="outlined"
           color="secondary"
         >
           <DeleteIcon />?
         </Button>
       ) : (
         <Button
-          size="small"
           onClick={() => {
             setConfirmDelete(true);
             setDeleteTimeout();
@@ -70,21 +69,13 @@ const Exercise = props => {
   let pauseOrEdit;
   if (timerStatus === "play") {
     pauseOrEdit = (
-      <Button
-        size="small"
-        className="GridItemEdit"
-        onClick={() => setTimerStatus("paused")}
-      >
+      <Button className="GridItemEdit" onClick={() => setTimerStatus("paused")}>
         <PauseIcon />
       </Button>
     );
   } else {
     pauseOrEdit = (
-      <Button
-        size="small"
-        className="GridItemEdit"
-        onClick={() => setExpanded(!expanded)}
-      >
+      <Button className="GridItemEdit" onClick={() => setExpanded(!expanded)}>
         <EditIcon />
       </Button>
     );
@@ -93,10 +84,7 @@ const Exercise = props => {
   return (
     <Paper className="ExerciseGrid" key={index}>
       <p className="GridItemName">{newExercise.name}</p>
-      <FormControl
-        className="GridItemWeight"
-        disabled={timerStatus === "play"}
-      >
+      <FormControl className="GridItemWeight" disabled={timerStatus === "play"}>
         {newExercise.weightArray ? (
           <Select
             className="GridItemWeight"
@@ -124,6 +112,9 @@ const Exercise = props => {
               onChange({ ...newExercise, weight: event.target.value })
             }
             disabled={timerStatus === "play"}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">Kg</InputAdornment>
+            }}
           />
         )}
       </FormControl>
@@ -134,16 +125,15 @@ const Exercise = props => {
         setExpanded={setExpanded}
       />
       {expanded ? menu : null}
-      <p className="GridItemEnd"> </p>
     </Paper>
   );
 };
 
 //Save when exercise started, duration and when ended
 const ExerciseTimer = props => {
-  let icon;
+  let ret;
   if (props.timerStatus === "play") {
-    icon = (
+    ret = (
       <Button
         className="GridItemTimer"
         onClick={() => props.setTimerStatus("stopped")}
@@ -152,7 +142,7 @@ const ExerciseTimer = props => {
       </Button>
     );
   } else {
-    icon = (
+    ret = (
       <Button
         className="GridItemTimer"
         onClick={() => {
@@ -165,7 +155,7 @@ const ExerciseTimer = props => {
     );
   }
 
-  return icon;
+  return ret;
 };
 
 export default Exercise;
