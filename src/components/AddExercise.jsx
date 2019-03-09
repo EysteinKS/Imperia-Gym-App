@@ -8,15 +8,15 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
+//import CircularProgress from "@material-ui/core/CircularProgress";
 import Button from "@material-ui/core/Button";
 import { mapObject } from "../util";
 import "./AddExercise.css";
 
 //FOR THE EXERCISELIST
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Radio from "@material-ui/core/Radio";
@@ -30,31 +30,57 @@ const styles = () => ({
   panel: {
     width: "100%",
     padding: "0px",
+    marginBottom: "0px",
     display: "block"
   },
   darkBackground: {
     backgroundColor: "rgba(0,0,0,.03)"
+  },
+  center: {
+    justifyContent: "center"
   }
 });
 
-/*const ExpansionPanelSummary = withStyles({
-    root: {
-        backgroundColor: 'rgba(0,0,0,.03)',
-        borderBottom: '1px solid rgba(0,0,0,.125)',
-        marginBottom: -1,
-        minHeight: 56,
-        '&$expanded': {
-          minHeight: 56,
-        },
-      },
-      content: {
-        '&$expanded': {
-          margin: '12px 0',
-        },
-      },
-      expanded: {},
-})(props => <MuiExpansionPanelSummary {...props}/>)
-ExpansionPanelSummary.muiName = 'ExpansionPanelSummary';*/
+const ExpansionPanel = withStyles({
+  root: {
+    border: '1px solid rgba(0,0,0,.125)',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
+      borderBottom: 0,
+    },
+    '&:before': {
+      display: 'none',
+    },
+  },
+  expanded: {
+    margin: 'auto',
+  },
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+  root: {
+    borderBottom: '1px solid rgba(0,0,0,.125)',
+    marginBottom: -1,
+    minHeight: 56,
+    '&$expanded': {
+      minHeight: 56,
+    },
+  },
+  content: {
+    '&$expanded': {
+      margin: '12px 0',
+    },
+  },
+  expanded: {},
+})(props => <MuiExpansionPanelSummary {...props} />);
+
+ExpansionPanelSummary.muiName = 'ExpansionPanelSummary';
+
+const ExpansionPanelDetails = withStyles(theme => ({
+  root: {
+    padding: theme.spacing.unit * 2,
+  },
+}))(MuiExpansionPanelDetails);
 
 const AddExercise = props => {
   const [exerciseID, setExerciseID] = useState("");
@@ -66,7 +92,6 @@ const AddExercise = props => {
     handleDialogClose,
     handleAddExercise,
     exercises,
-    exerciseList,
     classes
   } = props;
 
@@ -118,7 +143,7 @@ const AddExercise = props => {
     >
       <DialogTitle>Øvelser</DialogTitle>
       <DialogContent>{content}</DialogContent>
-      <DialogActions>
+      <DialogActions className={classes.center}>
         {/*<ExerciseName exerciseList={exerciseList} exerciseID={exerciseID}/>*/}
         <TextField
           value={exerciseID}
@@ -166,14 +191,14 @@ const ExerciseSelect = props => {
   return list;
 };
 
-const ExerciseName = props => {
+/*const ExerciseName = props => {
   const { exerciseList, exerciseID } = props;
   if (exerciseList[exerciseID]) {
     return <p>{exerciseList[exerciseID].name}</p>;
   } else {
     return <CircularProgress/>;
   }
-};
+};*/
 
 const ExercisePanel = props => {
   let panelName = props.panel.name;
