@@ -16,6 +16,8 @@ class SessionContainer extends Component {
       expanded: null,
       shouldScroll: false
     };
+
+    //Used for scrolling to bottom when adding new exercise
     this.lastRef = React.createRef(null)
     this.list = []
   }
@@ -42,7 +44,8 @@ class SessionContainer extends Component {
       this.setState(state => ({
         currentExercises: state.currentExercises.concat(newExercise),
         isDialogOpen: false,
-        shouldScroll: true
+        shouldScroll: true,
+        expanded: null
       }));
     } else {
       alert("Finner ikke maskin " + id);

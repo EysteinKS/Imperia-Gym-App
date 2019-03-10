@@ -8,6 +8,7 @@ import Fab from '@material-ui/core/Fab';
 import MenuIcon from '@material-ui/icons/Menu';
 import AddIcon from '@material-ui/icons/Add';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import { firestore } from "../firebase"
 
 const styles = theme => ({
   text: {
@@ -56,7 +57,7 @@ function Header(props) {
             <AddIcon />
           </Fab>
           <div>
-            <IconButton color="inherit">
+            <IconButton color="inherit" onClick={() => firestore.getExercises()}>
               <MoreIcon />
             </IconButton>
           </div>
