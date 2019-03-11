@@ -89,7 +89,6 @@ const AddExercise = props => {
   const [secondExpanded, setSecondExpanded] = useState();
   let dialogBottomRef = useRef(null);
   const scrollToBottom = () => {
-    console.log("Scrolling to bottom of Dialog");
     dialogBottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -98,18 +97,22 @@ const AddExercise = props => {
     handleDialogClose,
     handleAddExercise,
     exercises,
-    classes
+    classes,
+    lang
   } = props;
 
+  let heading;
+  if (lang === "NO") {
+    heading = "Øvelser";
+  } else {
+    heading = "Exercises";
+  }
+
   let content = mapObject(exercises, (result, index) => {
-    console.log(`Mapping through [${result}] in`, exercises);
     const map = exercises[result];
     const next = mapObject(map, (panel, index) => {
-      console.log("panel: ", panel);
       if (panel !== "active" && panel !== "name" && panel !== "id") {
-        console.log("panel !== active, id or name");
-        if (map[panel].name["NO"] !== undefined) {
-          console.log(`Making panel for ${map.toString()}[${panel}]`);
+        if (map[panel].name[lang] !== undefined) {
           return (
             <ExercisePanel
               panel={map[panel]}
@@ -118,11 +121,13 @@ const AddExercise = props => {
               setExpanded={setSecondExpanded}
               class={classes.panel}
               scroll={scrollToBottom}
+              lang={lang}
             >
               <ExerciseSelect
                 object={map[panel]}
                 checked={exerciseID}
                 onChange={setExerciseID}
+                lang={lang}
               />
             </ExercisePanel>
           );
@@ -131,8 +136,7 @@ const AddExercise = props => {
     });
 
     if (result !== "active" && result !== "name" && result !== "id") {
-      if (exercises[result].name["NO"] !== undefined) {
-        console.log(`Making panel for ${exercises.toString()}[${result}]`);
+      if (exercises[result].name[lang] !== undefined) {
         return (
           <ExercisePanel
             panel={map}
@@ -142,6 +146,7 @@ const AddExercise = props => {
             class={classes.panel}
             darkBackground={classes.darkBackground}
             scroll={scrollToBottom}
+            lang={lang}
           >
             {next}
           </ExercisePanel>
@@ -158,7 +163,7 @@ const AddExercise = props => {
       fullWidth={true}
       maxWidth="md"
     >
-      <DialogTitle>Øvelser</DialogTitle>
+      <DialogTitle>{heading}</DialogTitle>
       <DialogContent>
         {content}
         <div ref={dialogBottomRef} />
@@ -187,7 +192,7 @@ const AddExercise = props => {
 };
 
 const ExerciseSelect = props => {
-  const { object, checked, onChange } = props;
+  const { object, checked, onChange, lang } = props;
   let list = mapObject(object, (exercise, index) => {
     let id = object[exercise].ID;
     let myRef = useRef(null);
@@ -195,7 +200,7 @@ const ExerciseSelect = props => {
     //CHECK IF EXERCISE IS SELECTED, CHANGE COLOR ON PAPER WHEN ACTIVE
 
     if (exercise !== "active" && exercise !== "name" && exercise !== "id") {
-      if (object[exercise].name["NO"] !== undefined) {
+      if (object[exercise].name[lang] !== undefined) {
         return (
           <Paper
             onClick={() => {
@@ -213,7 +218,7 @@ const ExerciseSelect = props => {
                 className="SelectRadio"
               />
               <p className="SelectID">{id}</p>
-              <p className="SelectName">{object[exercise].name["NO"]}</p>
+              <p className="SelectName">{object[exercise].name[lang]}</p>
             </div>
           </Paper>
         );
@@ -226,7 +231,7 @@ const ExerciseSelect = props => {
 };
 
 const ExercisePanel = props => {
-  let panelName = props.panel.name["NO"];
+  let panelName = props.panel.name[props.lang];
   let isExpanded = props.expanded === panelName;
 
   return (

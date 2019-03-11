@@ -23,7 +23,7 @@ class SessionContainer extends Component {
   }
 
   componentDidMount() {
-    //this.exerciseList = exercisesFlat(this.props.exercises, "NO");
+    //this.exerciseList = exercisesFlat(this.props.exercises, this.props.lang);
   }
 
   componentDidUpdate() {
@@ -119,6 +119,7 @@ class SessionContainer extends Component {
           handleAddExercise={this.onAddStep}
           exercises={this.props.exercises}
           exerciseList={this.exerciseList}
+          lang={this.props.lang}
         />
       </div>
     );
