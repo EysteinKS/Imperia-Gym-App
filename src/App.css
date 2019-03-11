@@ -3,6 +3,7 @@
   height: 100vh;
 }
 
+/*https://stackoverflow.com/questions/14123999/center-a-div-horizontally-and-vertically*/
 .loader {
   position:absolute; /*it can be fixed too*/
   left:0; right:0;

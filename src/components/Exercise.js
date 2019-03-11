@@ -16,7 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 const Exercise = props => {
-  const { newExercise, index, onChange, onRemove, expanded, setExpanded } = props;
+  const { newExercise, index, onChange, onRemove, expanded, setExpanded, lang } = props;
   const [timerStatus, setTimerStatus] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const timeoutRef = useRef(null);
@@ -84,7 +84,7 @@ const Exercise = props => {
 
   return (
     <Paper className="ExerciseGrid" key={index}>
-      <p className="GridItemName">{newExercise.name["NO"]}</p>
+      <p className="GridItemName">{newExercise.name[lang]}</p>
       <FormControl className="GridItemWeight" disabled={timerStatus === "play"}>
         {newExercise.weightArray ? (
           <Select

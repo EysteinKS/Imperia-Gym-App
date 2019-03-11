@@ -102,6 +102,7 @@ class SessionContainer extends Component {
             index={index}
             expanded={this.state.expanded}
             setExpanded={(callback) => this.onEditExercise(callback)}
+            lang={this.props.lang}
           />
         </div>
       );
