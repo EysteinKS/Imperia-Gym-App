@@ -12,8 +12,10 @@ export const getExercises = async admin => {
         let thisDoc = docRef.data();
         if (thisDoc.active || admin) {
           //If category is active or request is admin, store key in exercises and map through category
+          // eslint-disable-next-line
           let { ["categories"]: omit, ...docWithoutCategories } = thisDoc;
           exercises[docRef.id] = docWithoutCategories;
+          // eslint-disable-next-line
           thisDoc.categories.map(cat => {
             let catID = cat.id;
             exercises[docRef.id][catID] = cat;

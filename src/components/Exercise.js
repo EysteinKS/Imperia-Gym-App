@@ -98,7 +98,7 @@ const Exercise = props => {
             {newExercise.weightArray.map((weight, index) => {
               return (
                 <MenuItem value={weight} key={index}>
-                  {weight}
+                  {weight} kg
                 </MenuItem>
               );
             })}
@@ -108,7 +108,7 @@ const Exercise = props => {
             className="GridItemWeight"
             value={newExercise.weight}
             variant="outlined"
-            placeholder="Vekt"
+            placeholder={lang==="NO"?"Vekt":"Weight"}
             type="tel"
             onChange={event =>
               onChange({ ...newExercise, weight: event.target.value })
