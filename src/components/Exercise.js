@@ -20,6 +20,13 @@ const Exercise = props => {
   const [timerStatus, setTimerStatus] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const timeoutRef = useRef(null);
+  const scrollRef = useRef(null)
+
+  const scrollToEdit = () => {
+    if(expanded !== index){
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   let menu = (
     <React.Fragment>
@@ -76,7 +83,7 @@ const Exercise = props => {
     );
   } else {
     pauseOrEdit = (
-      <Button className="GridItemEdit" onClick={() => setExpanded(expanded === index ? null : index )}>
+      <Button className="GridItemEdit" onClick={() => { setExpanded(expanded === index ? null : index ); scrollToEdit()}}>
         {expanded === index ? <LockIcon/> : <EditIcon />}
       </Button>
     );
@@ -84,7 +91,7 @@ const Exercise = props => {
 
   return (
     <Paper className="ExerciseGrid" key={index}>
-      <p className="GridItemName">{newExercise.name[lang]}</p>
+      <p className="GridItemName" ref={scrollRef}>{newExercise.name[lang]}</p>
       <FormControl className="GridItemWeight" disabled={timerStatus === "play"}>
         {newExercise.weightArray ? (
           <Select
