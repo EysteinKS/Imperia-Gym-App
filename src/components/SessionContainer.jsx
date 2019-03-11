@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "./SessionContainer.css";
 import AddExercise from "./AddExercise";
-import { exercisesFlat } from "../constants/mock";
-
 import Exercise from "./Exercise"
 
 class SessionContainer extends Component {
@@ -23,7 +21,8 @@ class SessionContainer extends Component {
   }
 
   componentDidMount() {
-    //this.exerciseList = exercisesFlat(this.props.exercises, this.props.lang);
+    this.exerciseList = this.props.exercisesFlat
+    console.log(this.exerciseList)
   }
 
   componentDidUpdate() {
@@ -94,7 +93,7 @@ class SessionContainer extends Component {
   render() {
     this.list = this.state.currentExercises.map((ex, index) => {
       return (
-        <div ref={this.lastRef}>
+        <div ref={this.lastRef} key={index}>
           <Exercise
             newExercise={ex}
             onChange={changedStep => this.onChangeStep(changedStep, index)}

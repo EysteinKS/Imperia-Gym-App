@@ -2,7 +2,7 @@ import { firestore } from "./firebase";
 
 export const getExercises = async admin => {
   let exercises = {};
-  admin = true
+  let exercisesFlat = {};
   await firestore
     .collection("Exercises")
     .get()
@@ -27,6 +27,7 @@ export const getExercises = async admin => {
                     let thisExercise = exercise.data();
                     if (thisExercise.active || admin) {
                       exercises[docRef.id][catID][exercise.id] = thisExercise;
+                      exercisesFlat[exercise.id] = thisExercise
                     }
                   });
                 })
@@ -37,7 +38,8 @@ export const getExercises = async admin => {
       });
     })
     .catch(err => console.log("Error: ", err));
-    return exercises;
+    let ret = { exercises: exercises, exercisesFlat: exercisesFlat }
+    return ret;
 };
 
 /* REFACTORING GETEXERCISES

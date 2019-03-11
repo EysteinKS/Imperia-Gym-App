@@ -70,7 +70,7 @@ function Header(props) {
           </Fab>
           <div>
             <Button onClick={() => changeLang()}>
-              <p>{props.language}</p>
+              <p className="white">{props.language}</p>
             </Button>
           </div>
         </Toolbar>

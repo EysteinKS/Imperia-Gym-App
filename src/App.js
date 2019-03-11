@@ -21,9 +21,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firestore.getExercises().then(exercises => {
-      console.log("Got data from Firestore: ", exercises);
-      this.setState({ loaded: true, exercises: exercises });
+    firestore.getExercises().then(ret => {
+      console.log("Got data from Firestore: ", ret);
+      this.setState({ loaded: true, exercises: ret.exercises, exercisesFlat: ret.exercisesFlat });
     });
   }
 
@@ -38,6 +38,8 @@ class App extends Component {
   render() {
     let loaded = this.state.loaded;
     let language = this.state.language
+    let exercises = this.state.exercises
+    let exercisesFlat = this.state.exercisesFlat
 
     return (
       <div className="App">
@@ -46,7 +48,8 @@ class App extends Component {
             <SessionContainer
               openDialog={this.state.openDialog}
               setDialog={callback => this.setDialog(callback)}
-              exercises={this.state.exercises}
+              exercises={exercises}
+              exercisesFlat={exercisesFlat}
               lang={language}
             />
             <Header setDialog={callback => this.setDialog(callback)} language={language} setLanguage={callback => this.setLanguage(callback)}/>
