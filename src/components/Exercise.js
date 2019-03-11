@@ -84,7 +84,7 @@ const Exercise = props => {
 
   return (
     <Paper className="ExerciseGrid" key={index}>
-      <p className="GridItemName">{newExercise.name}</p>
+      <p className="GridItemName">{newExercise.name["NO"]}</p>
       <FormControl className="GridItemWeight" disabled={timerStatus === "play"}>
         {newExercise.weightArray ? (
           <Select

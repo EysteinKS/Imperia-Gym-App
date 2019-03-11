@@ -87,8 +87,11 @@ const AddExercise = props => {
   const [exerciseID, setExerciseID] = useState("");
   const [expanded, setExpanded] = useState();
   const [secondExpanded, setSecondExpanded] = useState();
-  let dialogBottomRef = useRef(null)
-  const scrollToBottom = () => { console.log("Scrolling to bottom of Dialog"); dialogBottomRef.current.scrollIntoView({behavior: "smooth"})}
+  let dialogBottomRef = useRef(null);
+  const scrollToBottom = () => {
+    console.log("Scrolling to bottom of Dialog");
+    dialogBottomRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   const {
     open,
@@ -99,42 +102,51 @@ const AddExercise = props => {
   } = props;
 
   let content = mapObject(exercises, (result, index) => {
+    console.log(`Mapping through [${result}] in`, exercises);
     const map = exercises[result];
     const next = mapObject(map, (panel, index) => {
-      if (map[panel].name !== undefined) {
-        return (
-          <ExercisePanel
-            panel={map[panel]}
-            key={index}
-            expanded={secondExpanded}
-            setExpanded={setSecondExpanded}
-            class={classes.panel}
-            scroll={scrollToBottom}
-          >
-            <ExerciseSelect
-              object={map[panel]}
-              checked={exerciseID}
-              onChange={setExerciseID}
-            />
-          </ExercisePanel>
-        );
+      console.log("panel: ", panel);
+      if (panel !== "active" && panel !== "name" && panel !== "id") {
+        console.log("panel !== active, id or name");
+        if (map[panel].name["NO"] !== undefined) {
+          console.log(`Making panel for ${map.toString()}[${panel}]`);
+          return (
+            <ExercisePanel
+              panel={map[panel]}
+              key={index}
+              expanded={secondExpanded}
+              setExpanded={setSecondExpanded}
+              class={classes.panel}
+              scroll={scrollToBottom}
+            >
+              <ExerciseSelect
+                object={map[panel]}
+                checked={exerciseID}
+                onChange={setExerciseID}
+              />
+            </ExercisePanel>
+          );
+        }
       }
     });
 
-    if (exercises[result].name != null) {
-      return (
-        <ExercisePanel
-          panel={map}
-          key={index}
-          expanded={expanded}
-          setExpanded={setExpanded}
-          class={classes.panel}
-          darkBackground={classes.darkBackground}
-          scroll={scrollToBottom}
-        >
-          {next}
-        </ExercisePanel>
-      );
+    if (result !== "active" && result !== "name" && result !== "id") {
+      if (exercises[result].name["NO"] !== undefined) {
+        console.log(`Making panel for ${exercises.toString()}[${result}]`);
+        return (
+          <ExercisePanel
+            panel={map}
+            key={index}
+            expanded={expanded}
+            setExpanded={setExpanded}
+            class={classes.panel}
+            darkBackground={classes.darkBackground}
+            scroll={scrollToBottom}
+          >
+            {next}
+          </ExercisePanel>
+        );
+      }
     }
   });
   return (
@@ -147,7 +159,10 @@ const AddExercise = props => {
       maxWidth="md"
     >
       <DialogTitle>Øvelser</DialogTitle>
-      <DialogContent>{content}<div ref={dialogBottomRef}/></DialogContent>
+      <DialogContent>
+        {content}
+        <div ref={dialogBottomRef} />
+      </DialogContent>
       <DialogActions className={classes.center}>
         <TextField
           value={exerciseID}
@@ -158,7 +173,14 @@ const AddExercise = props => {
           variant="filled"
         />
         <Button onClick={() => handleDialogClose(false)}>Lukk</Button>
-        <Button onClick={() => { handleAddExercise(exerciseID); handleDialogClose(false)}}>Velg</Button>
+        <Button
+          onClick={() => {
+            handleAddExercise(exerciseID);
+            handleDialogClose(false);
+          }}
+        >
+          Velg
+        </Button>
       </DialogActions>
     </Dialog>
   );
@@ -166,27 +188,36 @@ const AddExercise = props => {
 
 const ExerciseSelect = props => {
   const { object, checked, onChange } = props;
-  let list = mapObject(object, (machine, index) => {
-    let id = object[machine].ID;
-    let myRef = useRef(null)
+  let list = mapObject(object, (exercise, index) => {
+    let id = object[exercise].ID;
+    let myRef = useRef(null);
 
     //CHECK IF EXERCISE IS SELECTED, CHANGE COLOR ON PAPER WHEN ACTIVE
 
-    if (object[machine].name !== undefined) {
-      return (
-        <Paper onClick={() => { onChange(id); myRef.current.scrollIntoView({behavior: "smooth"})}} key={index} color="primary">
-          <div className="SelectGrid" ref={myRef}>
-            <Radio
-              checked={checked === id}
-              onChange={() => onChange(id)}
-              value={id}
-              className="SelectRadio"
-            />
-            <p className="SelectID">{id}</p>
-            <p className="SelectName">{object[machine].name}</p>
-          </div>
-        </Paper>
-      );
+    if (exercise !== "active" && exercise !== "name" && exercise !== "id") {
+      if (object[exercise].name["NO"] !== undefined) {
+        return (
+          <Paper
+            onClick={() => {
+              onChange(id);
+              myRef.current.scrollIntoView({ behavior: "smooth" });
+            }}
+            key={index}
+            color="primary"
+          >
+            <div className="SelectGrid" ref={myRef}>
+              <Radio
+                checked={checked === id}
+                onChange={() => onChange(id)}
+                value={id}
+                className="SelectRadio"
+              />
+              <p className="SelectID">{id}</p>
+              <p className="SelectName">{object[exercise].name["NO"]}</p>
+            </div>
+          </Paper>
+        );
+      }
     } else {
       return null;
     }
@@ -195,7 +226,7 @@ const ExerciseSelect = props => {
 };
 
 const ExercisePanel = props => {
-  let panelName = props.panel.name;
+  let panelName = props.panel.name["NO"];
   let isExpanded = props.expanded === panelName;
 
   return (
@@ -209,7 +240,7 @@ const ExercisePanel = props => {
             }
           : () => {
               props.setExpanded(panelName);
-              props.scroll()
+              props.scroll();
             }
       }
     >

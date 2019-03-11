@@ -22,17 +22,17 @@ const history = {
 
 }
 
-const exercisesFlat = input => {
+const exercisesFlat = (input, lang)=> {
     let obj = {}
     mapObject(input, (key) => {
         let firstKey = input[key]
-        if(firstKey.name !== undefined){
+        if(firstKey.name[lang] !== undefined){
             mapObject(firstKey, (secondKey) => {
                 let nextKey = firstKey[secondKey]
-                if(nextKey.name !== undefined) {
+                if(nextKey.name[lang] !== undefined) {
                     mapObject(nextKey, (thirdKey) => {
                         let lastKey = nextKey[thirdKey]
-                        if(lastKey.name !== undefined ) {
+                        if(lastKey.name[lang] !== undefined ) {
                             obj[thirdKey] = lastKey
                         }
                     })

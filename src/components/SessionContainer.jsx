@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./SessionContainer.css";
 import AddExercise from "./AddExercise";
-import { exercises, exercisesFlat } from "../constants/mock";
+import { exercisesFlat } from "../constants/mock";
 
 import Exercise from "./Exercise"
 
@@ -23,7 +23,7 @@ class SessionContainer extends Component {
   }
 
   componentDidMount() {
-    this.exerciseList = exercisesFlat(exercises);
+    //this.exerciseList = exercisesFlat(this.props.exercises, "NO");
   }
 
   componentDidUpdate() {
@@ -117,7 +117,7 @@ class SessionContainer extends Component {
           open={this.props.openDialog}
           handleDialogClose={(callback) => this.props.setDialog(callback)}
           handleAddExercise={this.onAddStep}
-          exercises={exercises}
+          exercises={this.props.exercises}
           exerciseList={this.exerciseList}
         />
       </div>

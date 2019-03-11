@@ -1,15 +1,14 @@
 import { firestore } from "./firebase";
 
-export const getExercises = admin => {
+export const getExercises = async admin => {
   let exercises = {};
-  let finished = false;
-  firestore
+  admin = true
+  await firestore
     .collection("Exercises")
     .get()
     .then(colRef => {
       colRef.forEach(docRef => {
         //Gets each main category of exercises
-        finished = false;
         let thisDoc = docRef.data();
         if (thisDoc.active || admin) {
           //If category is active or request is admin, store key in exercises and map through category
@@ -26,12 +25,8 @@ export const getExercises = admin => {
                 .then(catRef => {
                   catRef.forEach(exercise => {
                     let thisExercise = exercise.data();
-                    console.log(exercises);
                     if (thisExercise.active || admin) {
                       exercises[docRef.id][catID][exercise.id] = thisExercise;
-                    }
-                    if (!finished) {
-                      finished = true;
                     }
                   });
                 })
@@ -42,8 +37,32 @@ export const getExercises = admin => {
       });
     })
     .catch(err => console.log("Error: ", err));
-  if (finished) {
-    console.log(exercises);
     return exercises;
-  }
 };
+
+/* REFACTORING GETEXERCISES
+const getExercise = () => {
+  return new Promise(resolve => {
+    resolve(null);
+  });
+};
+
+const getSubCategories = () => {
+  return new Promise(resolve => {
+    resolve(null);
+  });
+};
+
+const getMainCategories = () => {
+  return new Promise(resolve => {
+    resolve(null);
+  });
+};
+
+export const getData = async admin => {
+  let data = {}
+  await firestore.collection("Exercises").get().then(colRef => {
+
+  })
+}
+*/
