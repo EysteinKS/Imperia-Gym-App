@@ -9,20 +9,39 @@ REPITISJONER er hvor mange du tar pr runde
 
 
 Innholdfortegnelse
-
+- ADMIN PANEL (kun for adminbruker)
+  - Brukere
+    - Aktive brukere
+  - Utstyr
+    -Stats (mest brukte maskin)
+      - Vedlikehold
+    - Redigere
+      - øvelser
+      - info
+      - Velkomstmelding
+      - ADHC (sette admin, rest link epost, (ROOT bruker kan endre passord))
 - Dashbord
 - Profil
   - Historik
   - Stats
+    -Buddyworkout
+  - Settings
 - Økt
+  -Legg til venn
 - Frontdesk
   -Info
     -annstatte
     -kart
     -kontaktinfo
   - PT
+    - Kontakt PT
+    - Logg
+    - Bestill time
+    - Timeplan
   - Gruppetimer
-  - 
+    -Buddyworkout
+  
+  
 
 //
 ---------- view  --------------
