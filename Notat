@@ -6,8 +6,66 @@ SETT er hvor mange runder
 REPITISJONER er hvor mange du tar pr runde
 
 
-###########  EDIT felt  ###########
+
+
+Innholdfortegnelse
+
+- Dashbord
+- Profil
+  - Historik
+  - Stats
+- Økt
+- Frontdesk
+  -Info
+    -annstatte
+    -kart
+    -kontaktinfo
+  - PT
+  - Gruppetimer
+  - 
+
+//
+---------- view  --------------
+
+######### state ############
+
+
+
+
+
+
+---------------  Basic view  ---------------
+########### (droppdown) EDIT felt  ###########
 
 - TID (Start tid, stopp tid, total tid)
-- TIPPS (info om treningsaparatet)
+
 - Notat 
+
+---------------  Selected view --------------- 
+###########  START/STOP felt  ###########
+
+Enderer rad til en smilefjes evaluering
+
+En farget ramme når aktiv (grønn), visuel endring
+
+
+
+---------- Timer view  --------------
+
+En farget ramme når aktiv (rød), visuel endring
+
+
+######### Play view ############
+Start knapp
+Stopp knapp
+Brukt Tid
+
+
+
+-------- Detailed view  ----------
+
+- TIPPS (info om treningsaparatet)
+
+
+
+
