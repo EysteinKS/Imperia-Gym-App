@@ -1,0 +1,31 @@
+public:
+
+src:
+    constants:
+        routes.js
+    firebase:
+        firebase.js
+        firestore.js
+        auth.js
+        index.js
+
+    redux:
+        actions:
+        reducers:
+        sagas:
+
+    containers:
+        Admin.jsx
+        Dashboard.jsx
+        Profile.jsx
+        Session.jsx
+        Frontdesk.jsx
+        Frame.jsx
+
+    components:
+        expansionpanel.js
+        exercise.js
+        footer.js
+        header.js
+        dialog.js
+        
