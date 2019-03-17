@@ -22,7 +22,6 @@ class SessionContainer extends Component {
 
   componentDidMount() {
     this.exerciseList = this.props.exercisesFlat
-    console.log(this.exerciseList)
   }
 
   componentDidUpdate() {

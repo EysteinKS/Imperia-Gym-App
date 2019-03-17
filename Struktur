@@ -23,10 +23,13 @@ src:
         Frame.jsx
 
     components:
-        expansionpanel.js
-        exercise.js
-        footer.js
-        header.js
+        dropdown.js
+        Exercise.js
+        Footer.js
+        Header.js
         dialog.js
+        buttons.js
+        icons.js
+        inputs.js
         
     App.js
