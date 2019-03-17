@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import SessionContainer from "./components/SessionContainer";
-import Header from "./components/Header";
+import Frame from "./containers/Frame";
 import { firestore } from "./firebase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -44,7 +44,10 @@ class App extends Component {
     return (
       <div className="App">
         {loaded ? (
-          <React.Fragment>
+          <Frame
+            language={language}
+            setDialog={(callback) => this.setDialog(callback)}
+            setLanguage={(callback) => this.setLanguage(callback)}>
             <SessionContainer
               openDialog={this.state.openDialog}
               setDialog={callback => this.setDialog(callback)}
@@ -52,8 +55,7 @@ class App extends Component {
               exercisesFlat={exercisesFlat}
               lang={language}
             />
-            <Header setDialog={callback => this.setDialog(callback)} language={language} setLanguage={callback => this.setLanguage(callback)}/>
-          </React.Fragment>
+          </Frame>
         ) : (
           <CircularProgress className="loader" />
         )}

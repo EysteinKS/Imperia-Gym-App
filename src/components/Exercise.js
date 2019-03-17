@@ -3,27 +3,29 @@ import Paper from "@material-ui/core/Paper";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
+import { SquareButton } from "./buttons";
 import FormControl from "@material-ui/core/FormControl";
-
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import PlayIcon from "@material-ui/icons/PlayArrow";
-import PauseIcon from "@material-ui/icons/Pause";
-import StopIcon from "@material-ui/icons/Stop";
-import LockIcon from "@material-ui/icons/Lock"
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 const Exercise = props => {
-  const { newExercise, index, onChange, onRemove, expanded, setExpanded, lang } = props;
+  const {
+    newExercise,
+    index,
+    onChange,
+    onRemove,
+    expanded,
+    setExpanded,
+    lang
+  } = props;
+
   const [timerStatus, setTimerStatus] = useState();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const timeoutRef = useRef(null);
-  const scrollRef = useRef(null)
+  const scrollRef = useRef(null);
 
   const scrollToEdit = () => {
-    if(expanded !== index){
+    if (expanded !== index) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
@@ -40,29 +42,29 @@ const Exercise = props => {
         className="GridItemNotes"
       />
       {confirmDelete ? (
-        <Button
+        <SquareButton
           onClick={() => {
             clearTimeout(timeoutRef.current);
             setConfirmDelete(false);
             setExpanded(null);
             onRemove();
           }}
-          className="GridItemRemove"
+          buttonStyle="GridItemRemove"
           variant="outlined"
           color="secondary"
+          icon="delete"
         >
-          <DeleteIcon />?
-        </Button>
+          ?
+        </SquareButton>
       ) : (
-        <Button
+        <SquareButton
           onClick={() => {
             setConfirmDelete(true);
             setDeleteTimeout();
           }}
-          className="GridItemRemove"
-        >
-          <DeleteIcon />
-        </Button>
+          buttonStyle="GridItemRemove"
+          icon="delete"
+        />
       )}
     </React.Fragment>
   );
@@ -77,21 +79,31 @@ const Exercise = props => {
   let pauseOrEdit;
   if (timerStatus === "play") {
     pauseOrEdit = (
-      <Button className="GridItemEdit" onClick={() => setTimerStatus("paused")}>
-        <PauseIcon />
-      </Button>
+      <SquareButton
+        buttonStyle="GridItemEdit"
+        onClick={() => setTimerStatus("paused")}
+        icon="pause"
+      />
     );
   } else {
+    let icon = expanded === index ? "lock" : "edit";
     pauseOrEdit = (
-      <Button className="GridItemEdit" onClick={() => { setExpanded(expanded === index ? null : index ); scrollToEdit()}}>
-        {expanded === index ? <LockIcon/> : <EditIcon />}
-      </Button>
+      <SquareButton
+        buttonStyle="GridItemEdit"
+        onClick={() => {
+          setExpanded(expanded === index ? null : index);
+          scrollToEdit();
+        }}
+        icon={icon}
+      />
     );
   }
 
   return (
     <Paper className="ExerciseGrid" key={index}>
-      <p className="GridItemName" ref={scrollRef}>{newExercise.name[lang]}</p>
+      <p className="GridItemName" ref={scrollRef}>
+        {newExercise.name[lang]}
+      </p>
       <FormControl className="GridItemWeight" disabled={timerStatus === "play"}>
         {newExercise.weightArray ? (
           <Select
@@ -115,7 +127,7 @@ const Exercise = props => {
             className="GridItemWeight"
             value={newExercise.weight}
             variant="outlined"
-            placeholder={lang==="NO"?"Vekt":"Weight"}
+            placeholder={lang === "NO" ? "Vekt" : "Weight"}
             type="tel"
             onChange={event =>
               onChange({ ...newExercise, weight: event.target.value })
@@ -131,7 +143,7 @@ const Exercise = props => {
       <ExerciseTimer
         timerStatus={timerStatus}
         setTimerStatus={setTimerStatus}
-        setExpanded={(callback) => setExpanded(callback)}
+        setExpanded={callback => setExpanded(callback)}
       />
       {expanded === index ? menu : null}
     </Paper>
@@ -143,24 +155,22 @@ const ExerciseTimer = props => {
   let ret;
   if (props.timerStatus === "play") {
     ret = (
-      <Button
-        className="GridItemTimer"
+      <SquareButton
+        buttonStyle="GridItemTimer"
         onClick={() => props.setTimerStatus("stopped")}
-      >
-        <StopIcon />
-      </Button>
+        icon="stop"
+      />
     );
   } else {
     ret = (
-      <Button
-        className="GridItemTimer"
+      <SquareButton
+        buttonStyle="GridItemTimer"
         onClick={() => {
           props.setTimerStatus("play");
           props.setExpanded(null);
         }}
-      >
-        <PlayIcon />
-      </Button>
+        icon="play"
+      />
     );
   }
 
