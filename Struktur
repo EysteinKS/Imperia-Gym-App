@@ -29,3 +29,4 @@ src:
         header.js
         dialog.js
         
+    App.js

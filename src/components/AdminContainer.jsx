@@ -25,6 +25,9 @@ const exerciseEditor = () => {
             <input name="name-NO"/>
             <input name="name-EN"/>
             <input name="ID"/>
+            <input name="weightArray"/>
+            <input name="active"/>
+            <input name="description"/>
         </div>
     )
 }
