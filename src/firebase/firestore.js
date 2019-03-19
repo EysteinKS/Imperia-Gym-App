@@ -1,8 +1,253 @@
 import { firestore } from "./firebase";
+import { mapObject } from "../util";
 
-//TODO: REFACTOR TO ALLOW FOR INFINITE NESTED CATEGORIES
-//CHECK FOR VARIABLE LAST: BOOL IN ALL COLLECTION DOCS
+//MAIN API
+export const getFirestoreDoc = async refString => {
+  let thisDoc = await firestore
+    .doc(refString)
+    .get()
+    .then(async docRef => {
+      return await docRef.data();
+    })
+    .catch(error =>
+      console.log(`Error while importing from ${refString}:`, error)
+    );
+  await console.log("Got ", refString);
+  return thisDoc;
+};
 
+export const getFirestoreCollection = async (refString, where) => {
+  let thisCol = await firestore
+    .collection(refString)
+    .where(where)
+    .get()
+    .then(async colRef => {
+      let ret = {};
+      await colRef.forEach(docRef => {
+        ret[docRef.id] = docRef.data();
+      });
+      return ret;
+    })
+    .catch(err => console.log(`Error while importing ${refString}:`, err));
+  return thisCol;
+};
+
+export const addDocumentWithRandomID = (refString, getData) => {
+  let documentRef = "";
+
+  firestore
+    .collection(refString)
+    .add(getData)
+    .then(docRef => {
+      documentRef = docRef.id;
+      return documentRef;
+    })
+    .catch(error => console.log("Error adding document with Random ID", error));
+};
+
+export const setDataToFirestore = async (refString, setVariable) => {
+  firestore
+    .doc(refString)
+    .set(setVariable)
+    .then(ret => {
+      console.log(`${setVariable} set to ${refString}`);
+      return ret;
+    })
+    .catch(error => console.log("Error setting data in Firestore", error));
+};
+
+export const mergeDataToFirestore = (refString, updateVariable) => {
+  firestore
+    .doc(refString)
+    .set(updateVariable, {merge: true})
+    .then(() => {
+      console.log(`${updateVariable} updated to ${refString}`);
+    })
+    .catch(error => console.log("Error updating data in Firestore", error));
+};
+
+export const updateDataToFirestore = ( refString, updateVariable ) => {
+  firestore
+    .doc(refString)
+    .update(updateVariable)
+    .then(() => {
+      console.log(`${updateVariable} updated to ${refString}`);
+    })
+    .catch(error => console.log("Error updating data in Firestore", error));
+}
+
+export const deleteFirestoreData = refString => {
+  firestore.doc(refString).delete();
+};
+//MAIN API END
+
+//REFERENCE STRING CONSTRUCTORS
+export const makeFirestoreRef = arr => {
+  let reference = arr.join("/");
+  console.log("makeFirestoreRef: ", reference)
+  return reference;
+};
+
+export const makeCategoriesRef = arr => {
+  let reference = arr.join(".categories.");
+  console.log("makeCategoriesRef: ", reference)
+  return reference;
+};
+
+export const makeExercisesRef = str => {
+  let reference = str + ".exercises"
+  console.log("makeExercisesRef: ", reference)
+  return reference
+};
+//CONSTRUCTORS END
+
+
+//EXERCISES API
+export const getExercisesFromFirestore = async () => {
+  let exerciseCategories = await getFirestoreDoc(makeFirestoreRef([
+    "Gym",
+    "imperia",
+    "exercises",
+    "categories"
+  ]));
+  let exerciseList = await getFirestoreDoc(makeFirestoreRef([
+    "Gym",
+    "imperia",
+    "exercises",
+    "exercisesList"
+  ]));
+  return { exerciseCategories, exerciseList };
+};
+
+export const initializeExercisesToFirestore = async ({
+  categories,
+  exercisesList
+}) => {
+  await setDataToFirestore(
+    ["Gym", "imperia", "exercises", "exercisesList"],
+    exercisesList
+  );
+  await setDataToFirestore(
+    ["Gym", "imperia", "exercises", "categories"],
+    categories
+  );
+  await console.log("Exercises initialized in Firestore!");
+};
+
+export const addExerciseToFirestore = async (obj, doc) => {
+  let newDocRef = makeFirestoreRef(["Gym", "imperia", "exercises"].concat(doc))
+  await mergeDataToFirestore(
+    newDocRef,
+    obj
+  );
+};
+
+export const updateExerciseInFirestore = async (obj, doc) => {
+  let newDocRef = makeFirestoreRef(["Gym", "imperia", "exercises"].concat(doc))
+  await updateDataToFirestore(
+    newDocRef,
+    obj
+  )
+}
+
+//EXERCISES API END
+
+//EXERCISES SCHEMAS
+export const exerciseFactory = obj => {
+  let languages = {};
+  mapObject(obj.name, lang => {
+    languages[lang] = obj.name[lang];
+  });
+  let weight = obj.weight || false;
+  return {
+    id: obj.id,
+    name: languages,
+    weightArray: weight,
+    active: obj.active,
+    location: obj.location,
+    ...obj
+  };
+};
+
+export const categoryFactory = obj => {
+  let languages = {};
+  mapObject(obj.name, lang => {
+    languages[lang] = obj.name[lang];
+  });
+  let nested = {};
+  if (obj.categories) {
+    nested = { ...nested, categories: obj.categories };
+  }
+  if (obj.exercises) {
+    nested = { ...nested, exercises: obj.exercises };
+  }
+  return {
+    id: obj.id,
+    active: obj.active,
+    name: languages,
+    ...nested,
+    location: obj.location,
+    ...obj
+  };
+};
+/*
+EXAMPLE SCHEMA INPUT
+
+console.log(
+  exerciseFactory({
+    id: "SF01",
+    name: { NO: "Sit ups", EN: "Sit ups" },
+    weight: [1, 2, 3, 4, 5],
+    active: true,
+    location: ["FreeWeight", "SecondFloor"]
+  })
+);
+console.log(
+  categoryFactory({
+    id: "FirstFloor",
+    name: { NO: "Første Etasje", EN: "First Floor" },
+    exercises: { FF01: true },
+    location: ["FreeWeight"],
+    active: true
+  })
+);
+
+*/
+//SCHEMAS END
+
+export const addCategoryToFirestore = () => {};
+
+
+//EXAMPLE SAVING
+/*
+
+let newExercise = {
+  id: "FF01",
+  name: {
+    NO: "Benkpress",
+    EN: "Bench pressure"
+  },
+  active: true,
+  location: ["FreeWeight", "FirstFloor"]
+};
+
+
+let generatedExercise = exerciseFactory(newExercise)
+
+addExerciseToFirestore({[generatedExercise.id]: generatedExercise}, "exercisesList");
+
+let exerciseCategory = `${makeExercisesRef(makeCategoriesRef(newExercise.location))}.${generatedExercise.id}`
+
+updateExerciseInFirestore(
+  {
+    [exerciseCategory]: false
+  },
+  "categories"
+);
+*/
+//EXAMPLE END
+
+//OLD GETEXERCISES FUNCTION
 export const getExercises = async admin => {
   let exercises = {};
   let exercisesFlat = {};
@@ -45,142 +290,3 @@ export const getExercises = async admin => {
   let ret = { exercises, exercisesFlat };
   return ret;
 };
-
-const getExerciseDocs = (categoryReference, admin) => {
-  return new Promise(async resolve => {
-    console.log("Getting: " + categoryReference);
-    await firestore
-      .collection(`${categoryReference}/Exercises`)
-      .get()
-      .then(async exercises => {
-        let result = {};
-        await exercises.forEach(exercise => {
-          let thisExercise = exercise.data();
-          if (thisExercise.active || admin) {
-            result = { ...result, [exercise.id]: thisExercise };
-          }
-        });
-        console.log("getExercisesDocs: ", result);
-        resolve(result);
-      })
-      .catch(err => console.log(err));
-  });
-};
-
-const getSubCategory = (categoryReference, admin) => {
-  return new Promise(async resolve => {
-    let currentCollection = `${categoryReference}/SubCategories`;
-    console.log("Getting " + currentCollection);
-    await firestore
-      .collection(currentCollection)
-      .get()
-      .then(async categories => {
-        let result = {};
-        let resultFlat = {};
-        await Promise.all(
-          categories.forEach(async category => {
-            let thisCategory = category.data();
-            currentCollection = `${currentCollection}/${category.id}`;
-            if (thisCategory.active || admin) {
-              result = { ...result, [category.id]: thisCategory };
-              if (thisCategory.last) {
-                return await getExerciseDocs(currentCollection, admin);
-              } else {
-                return await getSubCategory(currentCollection, admin);
-              }
-            }
-          })
-        ).then(ret => {
-          // eslint-disable-next-line
-          ret.map(arr => {
-            arr.forEach((key, index) => {
-              if (arr.last === undefined) {
-                resultFlat[arr.ID] = { ...resultFlat, ...arr };
-                result["exercises"][key] = { ...result[key], ...arr };
-              } else {
-                result["categories"][key] = { ...result[key], ...arr };
-              }
-            });
-          });
-          resolve({ result, resultFlat });
-        });
-      })
-      .catch(err => console.log(err));
-  });
-};
-
-export const getExercisesNew = async admin => {
-  let currentCollection = "Gym/Imperia/Exercises";
-  let exercises = {};
-  let exercisesFlat = {};
-  await firestore
-    .collection(currentCollection)
-    .get()
-    .then(async colRef => {
-      await Promise.all(
-        colRef.forEach(async category => {
-          let thisCategory = category.data();
-          if (thisCategory.active || admin) {
-            exercises = { ...exercises, [category.id]: thisCategory };
-            let thisCollection = `${currentCollection}/${category.id}`;
-            if (thisCategory.last) {
-              return await getExerciseDocs(thisCollection, admin);
-            } else {
-              return await getSubCategory(thisCollection, admin);
-            }
-          }
-        })
-      )
-      .then(ret => {
-        // eslint-disable-next-line
-        ret.map(arr => {
-          arr.forEach(key => {
-            if (arr.last === undefined) {
-              exercisesFlat[arr.ID] = { ...exercisesFlat, ...arr };
-              exercises["exercises"][key] = { ...exercises[key], ...arr };
-            } else {
-              exercises["categories"][key] = { ...exercises[key], ...arr };
-            }
-          });
-        });
-      })
-      .catch(err => console.log(err));
-    });
-    return { exercises, exercisesFlat };
-};
-
-/*
-DATABASE STRUCTURE
-
-Exercises (collection)
---FreeWeight (document { last: false })
-  --SubCategories (collection)
-    --FirstFloor (document { last: true })
-      --Exercises (collection)
-        --FF01 (document { ID: FFO1 etc... })
---Machines (document { last: false })
-  --SubCategories (collection)
-    --Legs (document { last: true })
-      --Exercises (collection)
-        --L01 (document { ID: L01 etc... })
-
-result: {
-  FreeWeight: {
-    last: false
-    name etc..
-    SubCategories: {
-      FirstFloor: {
-        last: true
-        name etc...
-        Exercises: {
-          FF01: {}
-          FF02: {}
-        }
-      }
-    }
-  },
-  Machines: {
-
-  }
-}
-*/

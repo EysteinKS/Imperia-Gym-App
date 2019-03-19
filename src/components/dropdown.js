@@ -7,6 +7,8 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Paper from "@material-ui/core/Paper";
 import Radio from "@material-ui/core/Radio";
 
+import { getIcon } from "./icons"
+
 export const DropdownPanel = props => {
   const {
     isSquare,
@@ -118,3 +120,20 @@ DropdownSelect.propTypes = {
 DropdownSelect.defaultProps = {
   shouldScroll: true
 };
+
+export const DropdownEdit = (props) => {
+  const {onClick, index, color} = props
+
+  return(
+    <Paper onClick={() => onClick()} key={index} color={color}>
+      {props.children}
+      <div>{getIcon("edit")}</div>
+    </Paper>
+  )
+}
+
+DropdownEdit.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  index: PropTypes.number,
+  color: PropTypes.string
+}

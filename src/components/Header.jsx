@@ -35,8 +35,8 @@ function ButtonAppBar(props) {
           aria-label="Menu"
           onClick={() =>
             firestore
-              .getExercisesNew(true)
-              .then(ret => console.log("Returned from fetchExercises: ", ret))
+              .getExercisesFromFirestore()
+              .then(ret => console.log("Returned from firestore: ", ret))
           }
         >
           <MenuIcon />
