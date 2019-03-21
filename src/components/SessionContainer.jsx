@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./SessionContainer.css";
+import "./css/SessionContainer.css";
 import AddExercise from "./AddExercise";
 import Exercise from "./Exercise"
 

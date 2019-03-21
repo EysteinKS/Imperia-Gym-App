@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SquareButton } from "./buttons";
 import { mapObject } from "../util";
-import "./AddExercise.css";
+import "./css/AddExercise.css";
 import { DropdownSelect, DropdownPanel } from "./dropdown";
 import { DialogWindow } from "./dialog";
 

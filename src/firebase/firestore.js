@@ -1,5 +1,6 @@
 import { firestore } from "./firebase";
 import { mapObject } from "../util";
+import _ from "lodash/fp/object"
 
 //MAIN API
 export const getFirestoreDoc = async refString => {
@@ -116,6 +117,7 @@ export const getExercisesFromFirestore = async () => {
     "exercises",
     "exercisesList"
   ]));
+  await console.log("Exercises from Firestore: ", {exerciseCategories, exerciseList})
   return { exerciseCategories, exerciseList };
 };
 
@@ -153,20 +155,22 @@ export const updateExerciseInFirestore = async (obj, doc) => {
 //EXERCISES API END
 
 //EXERCISES SCHEMAS
-export const exerciseFactory = obj => {
-  let languages = {};
-  mapObject(obj.name, lang => {
-    languages[lang] = obj.name[lang];
-  });
-  let weight = obj.weight || false;
-  return {
-    id: obj.id,
-    name: languages,
-    weightArray: weight,
-    active: obj.active,
-    location: obj.location,
-    ...obj
-  };
+
+const initialExercise = {
+  id: null,
+  name: {"NO": "", "EN": ""},
+  weightArray: false,
+  active: false,
+  location: ""
+}
+
+export const exerciseFactory = (obj = initialExercise) => {
+  let ret = {}
+  if(obj !== initialExercise){
+    let newObj = _.cloneDeep(obj)
+    ret = _.merge({...initialExercise}, newObj)
+  } else { ret = obj }
+  return { ...ret};
 };
 
 export const categoryFactory = obj => {

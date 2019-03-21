@@ -1,28 +1,37 @@
 import React, { Component } from 'react'
 import EditExercises from "../components/EditExercises"
+import "./Admin.css"
+//import EditExerciseDialog from "../components/EditExerciseDialog"
 
 export default class Admin extends Component {
   constructor(props) {
     super(props)
-  
     this.state = {
-       
     }
   }
 
-  componentDidMount() {
-    this.setState({exerciseCategories: this.props.exerciseCategories, exerciseList: this.props.exerciseList})
+  onEditExercise = (id) => {
+
+  }
+
+  onEditCategory = (id) => {
+
   }
 
   render() {
+    console.log("Admin props: ", this.props)
     return (
       <div className="adminGrid">
-        <section className="adminGridItemA">
+        <section className="adminGridItemB">
           <EditExercises
-            categories={this.state.exerciseCategories}
-            list={this.state.exerciseList}
+            categories={this.props.exerciseCategories}
+            list={this.props.exerciseList}
+            lang={this.props.lang}
+            onEditExercise={(callback) => this.onEditExercise(callback)}
+            onEditCategory={(callback) => this.onEditCategory(callback)}
           />
         </section>
+        {/*<EditExerciseDialog/>*/}
       </div>
     )
   }

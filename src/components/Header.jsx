@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -7,7 +7,11 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import { firestore } from "../firebase";
+
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import { Link } from "react-router-dom";
+import * as routes from "../constants/routes";
 
 const styles = {
   root: {
@@ -24,23 +28,35 @@ const styles = {
   }
 };
 
-function ButtonAppBar(props) {
+const ButtonAppBar = props => {
+  const [anchor, setAnchor] = useState(null);
+
   const { classes } = props;
   return (
     <AppBar position="fixed" className={classes.root}>
       <Toolbar>
+      <div>
         <IconButton
           className={classes.menuButton}
           color="inherit"
           aria-label="Menu"
-          onClick={() =>
-            firestore
-              .getExercisesFromFirestore()
-              .then(ret => console.log("Returned from firestore: ", ret))
-          }
+          onClick={event => setAnchor(event.currentTarget)}
         >
           <MenuIcon />
         </IconButton>
+        <Menu
+          ancholrEl={anchor}
+          open={Boolean(anchor)}
+          onClose={() => setAnchor(null)}
+        >
+          <MenuItem onClick={() => setAnchor(null)}>
+            <Link to={routes.HOME}>Admin</Link>
+          </MenuItem>
+          <MenuItem onClick={() => setAnchor(null)}>
+            <Link to={routes.SESSION}>Session</Link>
+          </MenuItem>
+        </Menu>
+        </div>
         <Typography variant="h6" color="inherit" className={classes.grow}>
           ISNCE GYM
         </Typography>
@@ -48,7 +64,7 @@ function ButtonAppBar(props) {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired
