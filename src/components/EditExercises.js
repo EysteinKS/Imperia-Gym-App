@@ -63,7 +63,7 @@ const EditExercises = props => {
       />
     );
   });
-  console.log("Array of ExercisesPanels: ", exercises)
+  //console.log("Array of ExercisesPanels: ", exercises)
 
   let heading;
   if (lang === "NO") {
@@ -112,7 +112,7 @@ const exercisesPanel = props => {
   let summary = (
     <div className={classes.summaryContent}><p>{category.name[lang]}</p><span>{editButton}{addButton}</span></div>
   )
-  console.log("category at ExercisesPanel: ", category)
+  //console.log("category at ExercisesPanel: ", category)
 
   if (category.categories && !category.exercises) {
     Object.keys(category.categories).forEach(cat => (
@@ -125,7 +125,7 @@ const exercisesPanel = props => {
         classes={classes}
       />)
     ))
-    console.log("categories is true, exercises is false")
+    //console.log("categories is true, exercises is false")
     return (
       <DropdownPanel
         isExpanded={isExpanded}
@@ -139,7 +139,7 @@ const exercisesPanel = props => {
       </DropdownPanel>
     );
   } else if (category.exercises && category.categories) {
-    console.log("categories is true, exercises is true")
+    //console.log("categories is true, exercises is true")
     Object.keys(category.categories).forEach(cat => (
       nestedPanels.push(<ExercisesPanel
         category={category.categories[cat]}
@@ -169,7 +169,7 @@ const exercisesPanel = props => {
       </DropdownPanel>
     );
   } else if(category.exercises && !category.categories) {
-    console.log("categories is false, exercises is true")
+    //console.log("categories is false, exercises is true")
     return (
       <DropdownPanel
         isExpanded={isExpanded}
@@ -194,7 +194,7 @@ const ExercisesPanel = withStyles(styles)(exercisesPanel)
 
 const ExerciseArray = props => {
   const { exercises, list, lang, onEdit } = props;
-  console.log("exercises at ExerciseArray: ", exercises)
+  //console.log("exercises at ExerciseArray: ", exercises)
   let arr = [];
   Object.keys(exercises).forEach(ex => {
     arr.push(
@@ -212,7 +212,7 @@ const ExerciseArray = props => {
 const exercisePaper = props => {
   const { exercise, lang, onEdit, classes } = props;
   return (
-    <Paper key={exercise.id}>
+    <Paper key={exercise.id} square>
       <span className={classes.exercise}>
         <p>{exercise.id}</p>
         <p>{exercise.name[lang]}</p>

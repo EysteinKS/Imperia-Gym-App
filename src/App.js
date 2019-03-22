@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import { firestore } from "./firebase";
+import * as db from "./dev/Database"
+import { nestObject } from "./api/nest"
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { BrowserRouter, Route } from "react-router-dom";
@@ -28,7 +30,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    firestore.getExercises().then(ret => {
+    console.log(nestObject(db.exerciseCollection))
+    this.setState({
+      exerciseCategories: db.categories,
+      exerciseList: db.exerciseList,
+      loaded: true
+    })
+    /*firestore.getExercises().then(ret => {
       console.log("Got data from Firestore: ", ret);
       this.setState({
         exercises: ret.exercises,
@@ -41,7 +49,7 @@ class App extends Component {
         exerciseList: ret.exerciseList,
         loaded: true
       });
-    });
+    });*/
   }
 
   setDialog = next => {
