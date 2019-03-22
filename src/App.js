@@ -30,10 +30,10 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log(nestObject(db.exerciseCollection))
+    let { categories, exercisesList } = nestObject(db.exerciseCollection)
     this.setState({
-      exerciseCategories: db.categories,
-      exerciseList: db.exerciseList,
+      exerciseCategories: categories,
+      exerciseList: exercisesList,
       loaded: true
     })
     /*firestore.getExercises().then(ret => {

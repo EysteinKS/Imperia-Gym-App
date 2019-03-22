@@ -1,34 +1,11 @@
+import _ from "lodash"
+
 export const nestObject = (input) => {
   //SEPARATES CATEGORIES AND EXERCISES, AND MAKES A NESTED OBJECT
   const { categories, exercises } = input
   let ret = recursiveCreate(categories)
   return { categories: ret, exercisesList: exercises}
 }
-
-/*const getCategories = (input) => {
-  let ret = {}
-  Object.keys(categories).map(cat => {
-    if(cat.location.length === 0) {
-      //IF CATEGORY HAS NO PARENTS
-      ret[cat.id] = { id: cat.id, active: cat.active }
-      if(cat.location.length > 0) {
-        ret[cat.id].location = cat.location
-      }
-      if(cat.exercises.length > 0){
-        ret[cat.id].exercises = cat.exercises
-      }
-      if(cat.categories.length > 0){
-        ret[cat.id].categories = {}
-      }
-    } else {
-      //IF CATEGORY HAS A PARENT
-      let locArr = cat.location.concat(cat.id)
-      let loc = locArr.join(".categories.")
-      ret[loc] = 
-    }
-  })
-  return ret
-}*/
 
 const recursiveCreate = (input) => {
   //console.log("input in recursiveCreate: ", input)
@@ -39,8 +16,14 @@ const recursiveCreate = (input) => {
     //IF CATEGORY IS MAIN PARENT
     if(cat.location === undefined || cat.location.length == 0){
       let index = cat.id
-      const { categories: omit, ...rest } = cat
+      const { categories: omit1, exercises: omit2, location: omit3, ...rest } = cat
       ret[index] = rest
+      if(!_.isEmpty(cat.exercises)){
+        ret[index].exercises = cat.exercises
+      }
+      if(!_.isEmpty(cat.location)){
+        ret[index].location = cat.location
+      }
       //IF CATEGORY HAS CHILDREN
       if(cat.categories !== undefined && cat.categories.length > 0){
         let children = recursiveChild(input, index)
@@ -59,7 +42,14 @@ const recursiveChild = (input, parent) => {
     let cat = input[category]
     let index = cat.id
     if(cat.location[cat.location.length - 1] === parent){
-      ret[index] = cat
+      const { categories: omit1, exercises: omit2, location: omit3, ...rest } = cat
+      ret[index] = rest
+      if(!_.isEmpty(cat.location)){
+        ret[index].exercises = cat.exercises
+      }
+      if(!_.isEmpty(cat.location)){
+        ret[index].location = cat.location
+      }
       if(cat.categories !== undefined && cat.categories.length > 0){
         let children = recursiveChild(input, index)
         ret[index]["categories"] = children
