@@ -24,7 +24,8 @@ class App extends Component {
       loaded: false,
       language: "NO",
       exerciseCategories: {},
-      exerciseList: {}
+      exerciseList: {},
+      currentExercises: []
     };
   }
 
@@ -66,6 +67,12 @@ class App extends Component {
     this.setState({ language: lang });
   };
 
+  addExercise = newExercise => {
+    this.setState(state => ({
+      currentExercises: state.currentExercises.concat(newExercise)
+    }))
+  }
+
   render() {
     let loaded = this.state.loaded;
     let language = this.state.language;
@@ -99,6 +106,8 @@ class App extends Component {
                   <SessionContainer
                     openDialog={this.state.openDialog}
                     setDialog={callback => this.setDialog(callback)}
+                    currentExercises={this.state.currentExercises}
+                    addExercise={(callback) => this.addExercise(callback)}
                     exercises={categories}
                     exercisesFlat={exerciseList}
                     lang={language}

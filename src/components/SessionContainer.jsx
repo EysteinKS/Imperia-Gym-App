@@ -22,9 +22,7 @@ class SessionContainer extends Component {
 
 
   componentDidUpdate() {
-    console.log("SessionContainer updated")
     if (this.list.length && this.state.shouldScroll) {
-      console.log("Scrolling to bottom")
       this.lastRef = this.list[this.list.length - 1].ref; 
       this.scrollToBottom()
       this.setState({shouldScroll: false})
@@ -36,15 +34,14 @@ class SessionContainer extends Component {
   };
 
   onAddStep = id => {
-    console.log("id at onAddStep: ", id)
     let newExercise = this.getExerciseList(id.toUpperCase());
     if (newExercise) {
+      this.props.addExercise(newExercise)
       this.setState({
-        currentExercises: this.state.currentExercises.concat(newExercise),
         isDialogOpen: false,
         shouldScroll: true,
         expanded: null
-      }, console.log("did setState, new state: ", this.state));
+      });
     } else {
       alert("Finner ikke maskin " + id);
     }
@@ -73,7 +70,6 @@ class SessionContainer extends Component {
 
   getExerciseList = id => {
     let exerciseList = this.props.exercisesFlat;
-    console.log(exerciseList[id])
     if (exerciseList[id]) {
       let ret = {
         ...exerciseList[id],
@@ -91,7 +87,7 @@ class SessionContainer extends Component {
   }
 
   render() {
-    this.list = this.state.currentExercises.map((ex, index) => {
+    this.list = this.props.currentExercises.map((ex, index) => {
       return (
         <div ref={this.lastRef} key={index}>
           <Exercise
@@ -107,7 +103,7 @@ class SessionContainer extends Component {
         </div>
       );
     });
-    console.log("currentExercises: ", this.state.currentExercises)
+    console.log("currentExercises: ", this.props.currentExercises)
 
     return (
       <div className="SessionContainer">
