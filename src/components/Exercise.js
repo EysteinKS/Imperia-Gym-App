@@ -8,6 +8,8 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
+//EXERCISE COMPONENT IN SESSION LIST
+
 const Exercise = props => {
   const {
     newExercise,

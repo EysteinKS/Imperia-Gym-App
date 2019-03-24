@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import { firestore } from "./firebase";
-import * as db from "./dev/Database"
-import { nestObject } from "./api/nest"
+import * as db from "./dev/Database";
+import { nestObject } from "./api/nest";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { BrowserRouter, Route } from "react-router-dom";
@@ -30,12 +29,15 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let { categories, exercisesList } = nestObject(db.exerciseCollection)
-    this.setState({
-      exerciseCategories: categories,
-      exerciseList: exercisesList,
-      loaded: true
-    })
+    nestObject(db.exerciseCollection).then(ret => {
+      console.log(ret);
+      let { categories, exercisesList } = ret;
+      this.setState({
+        exerciseCategories: categories,
+        exerciseList: exercisesList,
+        loaded: true
+      });
+    });
     /*firestore.getExercises().then(ret => {
       console.log("Got data from Firestore: ", ret);
       this.setState({
@@ -52,6 +54,10 @@ class App extends Component {
     });*/
   }
 
+  componentDidUpdate(){
+    console.log("App state = ", this.state)
+  }
+
   setDialog = next => {
     this.setState({ openDialog: next });
   };
@@ -63,25 +69,8 @@ class App extends Component {
   render() {
     let loaded = this.state.loaded;
     let language = this.state.language;
-    let exercises = this.state.exercises;
-    let exercisesFlat = this.state.exercisesFlat;
-
-    let session = (
-      <SessionContainer
-        openDialog={this.state.openDialog}
-        setDialog={callback => this.setDialog(callback)}
-        exercises={exercises}
-        exercisesFlat={exercisesFlat}
-        lang={language}
-      />
-    );
-    let admin = (
-      <Admin
-        exerciseList={this.state.exerciseList}
-        exerciseCategories={this.state.exerciseCategories}
-        lang={language}
-      />
-    );
+    let categories = this.state.exerciseCategories;
+    let exerciseList = this.state.exerciseList;
 
     return (
       <BrowserRouter>
@@ -92,10 +81,30 @@ class App extends Component {
               setDialog={callback => this.setDialog(callback)}
               setLanguage={callback => this.setLanguage(callback)}
             >
-
-              <Route exact path={"/"} component={() => admin} />
-              <Route exact path={routes.SESSION} component={() => session} />
-
+              <Route
+                exact
+                path={"/"}
+                component={() => (
+                  <Admin
+                    exerciseList={exerciseList}
+                    exerciseCategories={categories}
+                    lang={language}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path={routes.SESSION}
+                component={() => (
+                  <SessionContainer
+                    openDialog={this.state.openDialog}
+                    setDialog={callback => this.setDialog(callback)}
+                    exercises={categories}
+                    exercisesFlat={exerciseList}
+                    lang={language}
+                  />
+                )}
+              />
             </Frame>
           ) : (
             <CircularProgress className="loader" />

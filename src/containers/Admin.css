@@ -1,7 +1,15 @@
+.adminBlock {
+  display: block;
+  padding-top: 10vh;
+  height: 80%;
+  padding-bottom: 10vh;
+  padding-top: 10vh;
+  overflow-y: scroll;
+}
+
 .adminGrid {
   display: grid;
   grid-template-columns: 25% 50% 25%;
-  padding-top: 10vh;
 }
 
 .adminGridItemB {

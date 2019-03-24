@@ -16,3 +16,11 @@ export const addExerciseToCategory = store => next => action => {
     next(action)
   }
 }
+
+//TODO:
+
+//SAVE EXERCISE IN FIRESTORE
+
+//SAVE CATEGORY IN FIRESTORE
+
+//

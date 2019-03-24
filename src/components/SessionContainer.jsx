@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./css/SessionContainer.css";
-import AddExercise from "./AddExercise";
+import SessionDialog from "./SessionDialog";
 import Exercise from "./Exercise"
 
 class SessionContainer extends Component {
@@ -8,7 +8,6 @@ class SessionContainer extends Component {
     super(props);
     this.state = {
       currentExercises: [],
-      newExercise: undefined,
       error: null,
       isDialogOpen: false,
       expanded: null,
@@ -20,12 +19,12 @@ class SessionContainer extends Component {
     this.list = []
   }
 
-  componentDidMount() {
-    this.exerciseList = this.props.exercisesFlat
-  }
+
 
   componentDidUpdate() {
+    console.log("SessionContainer updated")
     if (this.list.length && this.state.shouldScroll) {
+      console.log("Scrolling to bottom")
       this.lastRef = this.list[this.list.length - 1].ref; 
       this.scrollToBottom()
       this.setState({shouldScroll: false})
@@ -37,14 +36,15 @@ class SessionContainer extends Component {
   };
 
   onAddStep = id => {
+    console.log("id at onAddStep: ", id)
     let newExercise = this.getExerciseList(id.toUpperCase());
     if (newExercise) {
-      this.setState(state => ({
-        currentExercises: state.currentExercises.concat(newExercise),
+      this.setState({
+        currentExercises: this.state.currentExercises.concat(newExercise),
         isDialogOpen: false,
         shouldScroll: true,
         expanded: null
-      }));
+      }, console.log("did setState, new state: ", this.state));
     } else {
       alert("Finner ikke maskin " + id);
     }
@@ -72,7 +72,8 @@ class SessionContainer extends Component {
   };
 
   getExerciseList = id => {
-    let exerciseList = this.exerciseList;
+    let exerciseList = this.props.exercisesFlat;
+    console.log(exerciseList[id])
     if (exerciseList[id]) {
       let ret = {
         ...exerciseList[id],
@@ -106,18 +107,19 @@ class SessionContainer extends Component {
         </div>
       );
     });
+    console.log("currentExercises: ", this.state.currentExercises)
 
     return (
       <div className="SessionContainer">
         <div className="GridCentered">
           {this.list}
         </div>
-        <AddExercise
+        <SessionDialog
           open={this.props.openDialog}
           handleDialogClose={(callback) => this.props.setDialog(callback)}
           handleAddExercise={this.onAddStep}
-          exercises={this.props.exercises}
-          exerciseList={this.exerciseList}
+          categories={this.props.exercises}
+          list={this.props.exercisesFlat}
           lang={this.props.lang}
         />
       </div>

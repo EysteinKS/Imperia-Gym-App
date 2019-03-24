@@ -4,17 +4,18 @@ export const nestObject = (input) => {
   //SEPARATES CATEGORIES AND EXERCISES, AND MAKES A NESTED OBJECT
   const { categories, exercises } = input
   let ret = recursiveCreate(categories)
-  return { categories: ret, exercisesList: exercises}
+  return Promise.resolve({ categories: ret, exercisesList: exercises})
 }
 
 const recursiveCreate = (input) => {
   //console.log("input in recursiveCreate: ", input)
   let ret = {}
+  // eslint-disable-next-line
   Object.keys(input).map((category) => {
     let cat = input[category]
     //console.log("cat in recursiveCreate: ", cat)
     //IF CATEGORY IS MAIN PARENT
-    if(cat.location === undefined || cat.location.length == 0){
+    if(cat.location === undefined || cat.location.length === 0){
       let index = cat.id
       const { categories: omit1, exercises: omit2, location: omit3, ...rest } = cat
       ret[index] = rest
@@ -38,6 +39,7 @@ const recursiveCreate = (input) => {
 const recursiveChild = (input, parent) => {
   //console.log("input in recursiveChild: ", input)
   let ret = {}
+  // eslint-disable-next-line
   Object.keys(input).map((category) =>{
     let cat = input[category]
     let index = cat.id

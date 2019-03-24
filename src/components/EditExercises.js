@@ -23,7 +23,7 @@ const styles = () => ({
   },
 
   summary: {
-    minHeight: 56,
+    minHeight: 56
   },
 
   darkBackground: {
@@ -46,19 +46,25 @@ const styles = () => ({
 });
 
 const EditExercises = props => {
-  const { list, categories, lang, onAdd, onEditExercise, onEditCategory, classes } = props;
+  const {
+    list,
+    categories,
+    lang,
+    openExerciseDialog,
+    openCategoryDialog,
+    classes
+  } = props;
   const [isExpanded, setExpanded] = useState(true);
 
-  let exercises = []
+  let exercises = [];
   Object.keys(categories).forEach(category => {
     exercises.push(
       <ExercisesPanel
         category={categories[category]}
         list={list}
         lang={lang}
-        onAdd={onAdd}
-        onEditExercise={onEditExercise}
-        onEditCategory={onEditCategory}
+        openExerciseDialog={openExerciseDialog}
+        openCategoryDialog={openCategoryDialog}
         classes={classes}
       />
     );
@@ -71,8 +77,18 @@ const EditExercises = props => {
   } else {
     heading = "Exercises";
   }
-  let addButton = <SquareButton icon="add" onClick={onAdd}/>
-  let summary = (<div className={classes.summaryContent}><p>{heading}</p>{addButton}</div>)
+  let addButton = (
+    <SquareButton
+      icon="add"
+      onClick={() => openCategoryDialog({ type: "add", target: "" })}
+    />
+  );
+  let summary = (
+    <div className={classes.summaryContent}>
+      <p>{heading}</p>
+      {addButton}
+    </div>
+  );
 
   return (
     <div>
@@ -91,40 +107,57 @@ const EditExercises = props => {
   );
 };
 
-
 const exercisesPanel = props => {
   const {
     category,
     list,
     lang,
     onAdd,
-    onEditExercise,
-    onEditCategory,
+    openExerciseDialog,
+    openCategoryDialog,
     classes
   } = props;
   const [isExpanded, setExpanded] = useState(false);
-  let nestedPanels = []
+  let nestedPanels = [];
 
   let editButton = (
-    <SquareButton icon="edit" onClick={() => onEditCategory(category.id)} />
+    <SquareButton
+      icon="edit"
+      onClick={() => openCategoryDialog({ type: "edit", target: category.id })}
+    />
   );
-  let addButton = <SquareButton icon="add" onClick={onAdd}/>
+  let addButton = (
+    <SquareButton
+      icon="add"
+      onClick={() => openCategoryDialog({ type: "add", target: "" })}
+    />
+  );
   let summary = (
-    <div className={classes.summaryContent}><p>{category.name[lang]}</p><span>{editButton}{addButton}</span></div>
-  )
+    <div className={classes.summaryContent}>
+      <p>{category.name[lang]}</p>
+      <span>
+        {editButton}
+        {addButton}
+      </span>
+    </div>
+  );
   //console.log("category at ExercisesPanel: ", category)
 
+  //IF CATEGORY CONTAINS SUBCATEGORIES BUT NOT EXERCISES
   if (category.categories && !category.exercises) {
-    Object.keys(category.categories).forEach(cat => (
-      nestedPanels.push(<ExercisesPanel
-        category={category.categories[cat]}
-        list={list}
-        lang={lang}
-        onAdd={onAdd}
-        onEditExercise={callback => onEditExercise(callback)}
-        classes={classes}
-      />)
-    ))
+    Object.keys(category.categories).forEach(cat =>
+      nestedPanels.push(
+        <ExercisesPanel
+          category={category.categories[cat]}
+          list={list}
+          lang={lang}
+          onAdd={onAdd}
+          openExerciseDialog={callback => openExerciseDialog(callback)}
+          openCategoryDialog={callback => openCategoryDialog(callback)}
+          classes={classes}
+        />
+      )
+    );
     //console.log("categories is true, exercises is false")
     return (
       <DropdownPanel
@@ -138,18 +171,22 @@ const exercisesPanel = props => {
         {nestedPanels}
       </DropdownPanel>
     );
+    //IF CATEGORY CONTAINS BOTH SUBCATEGORIES AND EXERCISES
   } else if (category.exercises && category.categories) {
     //console.log("categories is true, exercises is true")
-    Object.keys(category.categories).forEach(cat => (
-      nestedPanels.push(<ExercisesPanel
-        category={category.categories[cat]}
-        list={list}
-        lang={lang}
-        onAdd={onAdd}
-        onEditExercise={callback => onEditExercise(callback)}
-        classes={classes}
-      />)
-    ))
+    Object.keys(category.categories).forEach(cat =>
+      nestedPanels.push(
+        <ExercisesPanel
+          category={category.categories[cat]}
+          list={list}
+          lang={lang}
+          onAdd={onAdd}
+          openExerciseDialog={callback => openExerciseDialog(callback)}
+          openCategoryDialog={callback => openCategoryDialog(callback)}
+          classes={classes}
+        />
+      )
+    );
     return (
       <DropdownPanel
         isExpanded={isExpanded}
@@ -163,12 +200,13 @@ const exercisesPanel = props => {
           exercises={category.exercises}
           list={list}
           lang={lang}
-          onEdit={callback => onEditExercise(callback)}
+          openExerciseDialog={callback => openExerciseDialog(callback)}
         />
         {nestedPanels}
       </DropdownPanel>
     );
-  } else if(category.exercises && !category.categories) {
+    //IF CATEGORY CONTAINS EXERCISES BUT NOT SUBCATEGORIES
+  } else if (category.exercises && !category.categories) {
     //console.log("categories is false, exercises is true")
     return (
       <DropdownPanel
@@ -183,17 +221,31 @@ const exercisesPanel = props => {
           exercises={category.exercises}
           list={list}
           lang={lang}
-          onEdit={callback => onEditExercise(callback)}
+          openExerciseDialog={callback => openExerciseDialog(callback)}
         />
       </DropdownPanel>
     );
+    //IF CATEGORY CONTAINS NEITHER EXERCISES OR SUBCATEGORIES
+  } else {
+    return (
+    <DropdownPanel
+      isExpanded={isExpanded}
+      setExpanded={() => setExpanded(!isExpanded)}
+      panelStyle={classes.panel}
+      detailsStyle={classes.details}
+      summaryStyle={classes.summary}
+      summaryContent={summary}
+    >
+      <p>...</p>
+    </DropdownPanel>
+    )
   }
 };
 
-const ExercisesPanel = withStyles(styles)(exercisesPanel)
+const ExercisesPanel = withStyles(styles)(exercisesPanel);
 
 const ExerciseArray = props => {
-  const { exercises, list, lang, onEdit } = props;
+  const { exercises, list, lang, openExerciseDialog } = props;
   //console.log("exercises at ExerciseArray: ", exercises)
   let arr = [];
   Object.keys(exercises).forEach(ex => {
@@ -201,7 +253,9 @@ const ExerciseArray = props => {
       <Exercise
         exercise={list[ex]}
         lang={lang}
-        onEdit={() => onEdit(list[ex].id)}
+        openExerciseDialog={() =>
+          openExerciseDialog({ type: "edit", target: list[ex].id })
+        }
         key={list[ex].id}
       />
     );
@@ -210,19 +264,18 @@ const ExerciseArray = props => {
 };
 
 const exercisePaper = props => {
-  const { exercise, lang, onEdit, classes } = props;
+  const { exercise, lang, openExerciseDialog, classes } = props;
   return (
     <Paper key={exercise.id} square>
       <span className={classes.exercise}>
         <p>{exercise.id}</p>
         <p>{exercise.name[lang]}</p>
-        <SquareButton icon="edit" onClick={() => onEdit} />
+        <SquareButton icon="edit" onClick={() => openExerciseDialog()} />
       </span>
     </Paper>
   );
 };
 
-const Exercise = withStyles(styles)(exercisePaper)
-
+const Exercise = withStyles(styles)(exercisePaper);
 
 export default withStyles(styles)(EditExercises);

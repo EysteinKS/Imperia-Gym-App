@@ -6,6 +6,8 @@ import PauseIcon from "@material-ui/icons/Pause";
 import StopIcon from "@material-ui/icons/Stop";
 import LockIcon from "@material-ui/icons/Lock"
 import AddIcon from "@material-ui/icons/Add";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel"
 
 export const getIcon = (icon) => {
   switch(icon){
@@ -23,6 +25,10 @@ export const getIcon = (icon) => {
       return <LockIcon/>
     case("add"):
       return <AddIcon/>
+    case("save"):
+      return <SaveIcon/>
+    case("cancel"):
+      return <CancelIcon/>
     default:
       break
   }

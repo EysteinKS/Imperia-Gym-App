@@ -170,7 +170,9 @@ export const exerciseCollection = {
         NO: "Sit ups",
         EN: "Sit ups"
       },
-      location: ["FreeWeight", "FirstFloor"]
+      location: ["FreeWeight", "FirstFloor"],
+      weightArray: false
+
     },
     SF01: {
       active: true,
@@ -179,7 +181,9 @@ export const exerciseCollection = {
         NO: "Sykkel",
         EN: "Bike"
       },
-      location: ["FreeWeight", "SecondFloor"]
+      location: ["FreeWeight", "SecondFloor"],
+      weightArray: false
+
     },
     SF02: {
       active: true,
@@ -188,7 +192,9 @@ export const exerciseCollection = {
         NO: "Benpress",
         EN: "Leg pressure"
       },
-      location: ["FreeWeight", "SecondFloor"]
+      location: ["FreeWeight", "SecondFloor"],
+      weightArray: false
+
     },
     L01: {
       active: true,
@@ -197,7 +203,9 @@ export const exerciseCollection = {
         NO: "Bentrykk",
         EN: "Leg pressure"
       },
-      location: ["Machines"]
+      location: ["Machines"],
+      weightArray: false
+
     }
   }
 };
